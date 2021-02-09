@@ -1,34 +1,52 @@
 package simComponents;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import simComponents.Arc;
 
 public class Transition {
-  int ID;
+  String ID;
   ArrayList<Arc> outgoingArcs = new ArrayList<Arc>();
   ArrayList<Arc> incomingArcs = new ArrayList<Arc>();
+  String label;
 
+
+  // properties array format: [label]
   public Transition(String[] properties) { // constructor
-
+    ID = UUID.randomUUID().toString();
+    label = properties[0];
   }
 
-  void addIncomingArc(String[] properties) {
+  public String getID() {
+    return ID;
+  }
+
+  public String getLabel() {
+    return label;
+  }
+  
+  public void setLabel(String newLabel) {
+    label = newLabel;
+  }
+
+
+  public void addIncomingArc(String[] properties) {
     incomingArcs.add(new Arc(properties)); // change to create arc and set arcID as location with content arc
   }
 
-  void removeIncomingArc(String arcID) {
+  public void removeIncomingArc(String arcID) {
     incomingArcs.remove(arcID);
   }
 
-  void addOutgoingArc(String[] properties) {
+  public void addOutgoingArc(String[] properties) {
     outgoingArcs.add(new Arc(properties));
   }
 
-  void removeOutgoingArc(String arcID) {
+  public void removeOutgoingArc(String arcID) {
     outgoingArcs.remove(arcID);
   }
 
-  boolean isEnabled() {
+  public boolean isEnabled() {
     // check that for every incoming arc that the place it originates from has tokens >= the weight of the incoming arc
     return false;
   }
