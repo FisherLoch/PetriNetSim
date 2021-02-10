@@ -7,20 +7,27 @@ public class Arc {
   int weight = 1;
   String origin;
   String endpoint;
+  String label;
   
-  public Arc(String[] properties) { // constructor
+  public Arc() { // constructor
     ID = UUID.randomUUID().toString();
+    label = "1";
   }
 
   public String getID() {
     return ID;
   }
 
-  void addWeight(int weightToAdd) {
-    weight = weight + weightToAdd;
+  public String getLabel() {
+    return label;
   }
 
-  void setOrigin(String val) {
+  public void addWeight(int weightToAdd) {
+    weight = weight + weightToAdd;
+    label = Integer.toString(weight);
+  }
+
+  public void setOrigin(String val) {
     origin = val;
   }
 
@@ -28,11 +35,11 @@ public class Arc {
     return origin;
   }
 
-  void setEndpoint(String val) {
+  public void setEndpoint(String val) {
     endpoint = val;
   }
 
-  public String setEndpoint() {
+  public String getEndpoint() {
     return endpoint;
   }
 

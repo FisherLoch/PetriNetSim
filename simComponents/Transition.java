@@ -2,12 +2,11 @@ package simComponents;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import simComponents.Arc;
 
 public class Transition {
   String ID;
-  ArrayList<Arc> outgoingArcs = new ArrayList<Arc>();
-  ArrayList<Arc> incomingArcs = new ArrayList<Arc>();
+  ArrayList<String> outgoingArcs = new ArrayList<String>();
+  ArrayList<String> incomingArcs = new ArrayList<String>();
   String label;
 
 
@@ -30,16 +29,18 @@ public class Transition {
   }
 
 
-  public void addIncomingArc(String[] properties) {
-    incomingArcs.add(new Arc(properties)); // change to create arc and set arcID as location with content arc
+  public void addIncomingArc(String arcID) {
+    incomingArcs.add(arcID); // change to create arc and set arcID as location with content arc
+    // check whether arc is already in?
   }
 
   public void removeIncomingArc(String arcID) {
+    // wont work right now, search for arc, remove index of
     incomingArcs.remove(arcID);
   }
 
-  public void addOutgoingArc(String[] properties) {
-    outgoingArcs.add(new Arc(properties));
+  public void addOutgoingArc(String arcID) {
+    outgoingArcs.add(arcID);
   }
 
   public void removeOutgoingArc(String arcID) {

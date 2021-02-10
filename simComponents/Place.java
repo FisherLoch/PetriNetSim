@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public class Place {
   String ID;
-  ArrayList<Arc> outgoingArcs = new ArrayList<Arc>();
-  ArrayList<Arc> incomingArcs = new ArrayList<Arc>();
+  ArrayList<String> outgoingArcs = new ArrayList<String>();
+  ArrayList<String> incomingArcs = new ArrayList<String>();
   int tokens = 0;
   String label;
 
@@ -28,16 +28,16 @@ public class Place {
     label = newLabel;
   }
 
-  public void addIncomingArc(String[] properties) {
-    incomingArcs.add(new Arc(properties)); // change to create arc and set arcID as location with content arc
+  public void addIncomingArc(String arcID) {
+    incomingArcs.add(arcID); // change to create arc and set arcID as location with content arc
   }
 
   public void removeIncomingArc(String arcID) {
     incomingArcs.remove(arcID);
   }
 
-  public void addOutgoingArc(String[] properties) {
-    outgoingArcs.add(new Arc(properties));
+  public void addOutgoingArc(String arcID) {
+    outgoingArcs.add(arcID);
   }
 
   public void removeOutgoingArc(String arcID) {

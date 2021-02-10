@@ -10,6 +10,7 @@ public class PetriNetSimulator {
 
     ArrayList<Transition> transitions = new ArrayList<Transition>();
     ArrayList<Place> places = new ArrayList<Place>();
+    ArrayList<Arc> arcs = new ArrayList<Arc>();
     
     JFrame simulator = new JFrame("Petri Net Simulator");
     simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically
@@ -44,7 +45,8 @@ public class PetriNetSimulator {
     mbAdd.add(addArc);
     mbAdd.add(addPlace);
     mbAdd.add(addTransition);
-    addArc.addActionListener(e -> addNewArc());
+
+    // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
     addPlace.addActionListener(e -> addNewPlace(places));
     addTransition.addActionListener(e -> addNewTransition(transitions));
 
@@ -56,9 +58,29 @@ public class PetriNetSimulator {
     
   }
   
-  public static void addNewArc() {
-    System.out.println("AddnewArc");
+  public static void addNewArc(String startObj, int transitionIndex, int placeIndex, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {  
+    Arc arcToAdd = new Arc();
+    
+    if (startObj == "T") { // arc originates from transition and is going into a place
+      
+      transitions.get(transitionIndex).addOutgoingArc(arcToAdd.getID());
+      arcToAdd.setOrigin(transitions.get(transitionIndex).getID());
+      places.get(placeIndex).addIncomingArc(arcToAdd.getID());
+      arcToAdd.setEndpoint(places.get(placeIndex).getID());
+
+      arcs.add(arcToAdd);
+      
+    } else {
+      places.get(placeIndex).addOutgoingArc(arcToAdd.getID());
+      arcToAdd.setOrigin(places.get(placeIndex).getID());
+      transitions.get(transitionIndex).addIncomingArc(arcToAdd.getID());
+      arcToAdd.setEndpoint(transitions.get(transitionIndex).getID());
+
+      arcs.add(arcToAdd);
+      
+    }
   }
+
   // ######### TODO #############
   // after clicking add new arc, the next place (or transition) to be clicked will be the origin, and then the next clicked transition (or place) will be the destination
   // do checks for whether clicking on the right one the second time
@@ -69,13 +91,13 @@ public class PetriNetSimulator {
 
   public static void addNewPlace(ArrayList<Place> places) { 
     Place placeToAdd = new Place(new String[] {"Place " + (places.size() + 1)}); // pass in a default label for the new place
-    placeToAdd.addActionListener(e -> placeClicked());
+    //placeToAdd.addActionListener(e -> placeClicked());
     places.add(placeToAdd);
   }
 
   public static void addNewTransition(ArrayList<Transition> transitions) {
     Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}); // pass in a default label for the new transition 
-    transitionToAdd.addActionListener(e -> transitionClicked());
+    //transitionToAdd.addActionListener(e -> transitionClicked());
     transitions.add(transitionToAdd);
   }
 
