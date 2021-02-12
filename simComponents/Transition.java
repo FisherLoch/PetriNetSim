@@ -67,9 +67,26 @@ public class Transition {
     }
   }
 
-  public boolean isEnabled() {
-    // check that for every incoming arc that the place it originates from has tokens >= the weight of the incoming arc
+
+
+// might not be needed yet
+  public boolean containsOutgoingArc(String arcID) {
+    for (int i=0; i<outgoingArcs.size(); i++) {
+      if (outgoingArcs.get(i) == arcID) {
+        return true;
+      }
+    }
     return false;
   }
+
+  public boolean containsIncomingArc(String arcID) {
+    for (int i=0; i<incomingArcs.size(); i++) {
+      if (incomingArcs.get(i) == arcID) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }

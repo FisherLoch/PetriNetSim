@@ -27,6 +27,10 @@ public class Arc {
     label = Integer.toString(weight);
   }
 
+  public int getWeight() {
+    return weight;
+  }
+
   public void setOrigin(String val) {
     origin = val;
   }

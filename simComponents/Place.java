@@ -28,12 +28,34 @@ public class Place {
     label = newLabel;
   }
 
+  public int getTokens() { 
+    return tokens;
+  }
+
   public ArrayList<String> getIncomingArcsList() {
     return incomingArcs;
   }
 
   public ArrayList<String> getOutgoingArcsList() {
     return outgoingArcs;
+  }
+
+  public boolean containsOutgoingArc(String arcID) {
+    for (int i=0; i<outgoingArcs.size(); i++) {
+      if (outgoingArcs.get(i) == arcID) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean containsIncomingArc(String arcID) {
+    for (int i=0; i<incomingArcs.size(); i++) {
+      if (incomingArcs.get(i) == arcID) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void addIncomingArc(String arcID) {

@@ -90,6 +90,9 @@ public class PetriNetSimulator {
   // could possibly have the user select a place and transition and then click add arc, have a default direction and they have the option to flip it
 
 
+  // handle source and sink transitions
+
+
   public static void addNewPlace(ArrayList<Place> places) { 
     Place placeToAdd = new Place(new String[] {"Place " + (places.size() + 1)}); // pass in a default label for the new place
     //placeToAdd.addActionListener(e -> placeClicked());
@@ -169,6 +172,49 @@ public class PetriNetSimulator {
       }
     }  
   }
+
+
+  // will need to check for if multiple arcs come out of a single place and to add up the total weights before checking down the line (edge case)
+
+  public boolean isTransitionEnabled(Transition t, ArrayList<Arc> arcs, ArrayList<Place> places) {
+    ArrayList<String> arcsList = t.getIncomingArcsList();
+    // check that for every incoming arc that the place it originates from has tokens >= the weight of the incoming arc
+    if (arcsList.size() == 0) { // source transition
+      return true;
+    }
+
+    ArrayList<PlaceIndexArcID> placeIndexes = new ArrayList<PlaceIndexArcID>();
+
+    for (int i=0; i<arcsList.size(); i++) {
+      for (int j=0; j<places.size(); j++) {
+        if (places.get(j).containsOutgoingArc(arcsList.get(i))) { // if the place contains an outgoing arc with the current arcID in question
+          placeIndexes.add(new PlaceIndexArcID(j, arcsList.get(i)));
+        }
+      }
+    }
+
+    for (int i=0; i<placeIndexes.size(); i++) {
+      if (places.get(placeIndexes.get(i).getIndex()).getTokens() < getArcWeight(arcs, placeIndexes.get(i).getArcID())) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public int getArcWeight(ArrayList<Arc> arcs, String arcID) {
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getID() == arcID) {
+        return arcs.get(i).getWeight();
+      }
+    }
+
+    System.out.println("getArcWeight: THIS LINE SHOULD NEVER BE REACHED");
+    return -1;
+  }
+
+
+
 
 
 
