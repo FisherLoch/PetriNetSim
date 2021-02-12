@@ -8,6 +8,7 @@ public class PetriNetSimulator {
   public static void main(String[] args) {
     System.out.println("Petri Net Simulator");
 
+    // might be worth storing the transitions, places and arcs in a hash table so they can be found more quickly, but this may make rendering more awkward
     ArrayList<Transition> transitions = new ArrayList<Transition>();
     ArrayList<Place> places = new ArrayList<Place>();
     ArrayList<Arc> arcs = new ArrayList<Arc>();
@@ -101,6 +102,73 @@ public class PetriNetSimulator {
     transitions.add(transitionToAdd);
   }
 
+
+  public static void removeTransition(String transID, ArrayList<Transition> transitions, ArrayList<Place> places, ArrayList<Arc> arcs) {
+    // find transition with transition ID, then go through list of incoming and outgoing arcs and delete all of those arcs, finally, delete transition itself
+    int transIndex = -1;
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getID() == transID) {
+        transIndex = i;
+        break;
+      }
+    }
+    
+    ArrayList<String> outgoingArcsList = transitions.get(transIndex).getOutgoingArcsList();
+    ArrayList<String> incomingArcsList = transitions.get(transIndex).getIncomingArcsList();
+
+    for (int i=0; i<outgoingArcsList.size(); i++) {
+      removeArc(outgoingArcsList.get(i), arcs, transitions, places);
+    }
+    for (int i=0; i<incomingArcsList.size(); i++) {
+      removeArc(incomingArcsList.get(i), arcs, transitions, places);
+    }
+    transitions.remove(transIndex);
+  }
+
+  public static void removePlace(String placeID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
+    // same process as removing a transition
+    int placeIndex = -1;
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getID() == placeID) {
+        placeIndex = i;
+        break;
+      }
+    }
+
+    ArrayList<String> incomingArcList = places.get(placeIndex).getIncomingArcsList();
+    ArrayList<String> outgoingArcList = places.get(placeIndex).getOutgoingArcsList();
+
+    for (int i=0; i<incomingArcList.size(); i++) {
+      removeArc(incomingArcList.get(i), arcs, transitions, places);
+    }
+    for (int i=0; i<outgoingArcList.size(); i++) {
+      removeArc(outgoingArcList.get(i), arcs, transitions, places);
+    }
+    places.remove(placeIndex);
+    
+  }
+
+  // check for possible function to make this more efficient
+  public static void removeArc(String arcID, ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places) {
+
+    // can possibly make these functions faster in general by returning when found and then breaking out of the loop, would require an extra couple of if statements though
+ 
+    for (int i=0; i<transitions.size(); i++) {
+      transitions.get(i).removeOutgoingArc(arcID);
+      transitions.get(i).removeIncomingArc(arcID);
+    }
+    for (int i=0; i<places.size(); i++) {
+      places.get(i).removeOutgoingArc(arcID);
+      places.get(i).removeIncomingArc(arcID);
+    }
+
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getID() == arcID) {
+        arcs.remove(i);
+        break; // if found before last element, exit for loop to save time
+      }
+    }  
+  }
 
 
 
