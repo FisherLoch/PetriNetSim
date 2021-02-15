@@ -214,6 +214,16 @@ public class PetriNetSimulator {
   }
 
 
+  // fire transition
+
+  // add tokens button
+  // change arc weight button
+  // change label button
+  // 
+
+  // rendering
+
+
 
 
 
