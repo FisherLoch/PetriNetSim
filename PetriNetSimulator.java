@@ -38,6 +38,9 @@ public class PetriNetSimulator {
     mbFile.add(open);
     mbFile.add(save);
     mbFile.add(saveAs);
+
+    // ** need action listeners for these
+
     // Add
     JMenu mbAdd = new JMenu("ADD");
     JMenuItem addArc = new JMenuItem("Add arc");
@@ -50,6 +53,16 @@ public class PetriNetSimulator {
     // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
     addPlace.addActionListener(e -> addNewPlace(places));
     addTransition.addActionListener(e -> addNewTransition(transitions));
+    // addTokens.addActionListner(...
+
+    // Edit
+    JMenu mbEdit = new JMenu("EDIT");
+    JMenuItem addTokens = new JMenuItem("Add tokens");
+    JMenuItem changeLabel = new JMenuItem("Change label");
+    JMenuItem addWeight = new JMenuItem("Add weight");
+    mbEdit.add(addTokens);
+    mbEdit.add(changeLabel);
+    mbEdit.add(addWeight);
 
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
@@ -216,10 +229,53 @@ public class PetriNetSimulator {
 
   // fire transition
 
-  // add tokens button
-  // change arc weight button
-  // change label button
-  // 
+  
+  public void addTokensToPlace(int tokensToAdd, ArrayList<Place> places, String placeID) {
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getID() == placeID) {
+        places.get(i).addTokens(tokensToAdd);
+        break;
+      }
+    }
+  }
+
+
+  public void changeArcWeight(int newWeight, ArrayList<Arc> arcs, String arcID) {
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getID() == arcID) {
+        arcs.get(i).setWeight(newWeight);
+        break;
+      }
+    }
+  }
+
+  public void changeArcLabel(String newLabel, ArrayList<Arc> arcs, String arcID) {
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getID() == arcID) {
+        arcs.get(i).setLabel(newLabel);
+        break;
+      }
+    }
+  }
+
+  public void changePlaceLabel(String newLabel, ArrayList<Place> places, String placeID) {
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getID() == placeID) {
+        places.get(i).setLabel(newLabel);
+        break;
+      }
+    }
+  }
+
+  public void changeTransitionLabel(String newLabel, ArrayList<Transition> transitions, String transitionID) {
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getID() == transitionID) {
+        transitions.get(i).setLabel(newLabel);
+        break;
+      }
+    }
+  }
+
 
   // rendering
 

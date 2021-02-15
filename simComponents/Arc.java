@@ -22,9 +22,17 @@ public class Arc {
     return label;
   }
 
+  public void setLabel(String newLabel) {
+    label = newLabel;
+  }
+
   public void addWeight(int weightToAdd) {
     weight = weight + weightToAdd;
     label = Integer.toString(weight);
+  }
+
+  public void setWeight(int newWeight) {
+    weight = newWeight;
   }
 
   public int getWeight() {
