@@ -229,6 +229,43 @@ public class PetriNetSimulator {
 
   // fire transition
 
+  public void fireTransition(ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places, String transitionID) {
+    Transition t = new Transition(new String[] {"placeholder"});
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getID() == transitionID) {
+        t = transitions.get(i);
+        break;
+      }
+    }
+
+    ArrayList<String> incArcs = t.getIncomingArcsList();
+    ArrayList<String> outArcs = t.getOutgoingArcsList();
+
+
+    for (int i=0; i<incArcs.size(); i++) {
+      for (int j=0; j<arcs.size(); j++) {
+        if (arcs.get(j).getID() == incArcs.get(i)) {
+          addTokensToPlace(-arcs.get(j).getWeight(), places, arcs.get(j).getOrigin()); // adding negative token value
+          break;
+        }
+      }
+    }
+
+
+    for (int i=0; i<outArcs.size(); i++) {
+      for (int j=0; j<arcs.size(); j++) {
+        if (arcs.get(j).getID() == outArcs.get(i)) {
+          addTokensToPlace(arcs.get(j).getWeight(), places, arcs.get(j).getEndpoint());
+          break;
+        }
+      }
+    }
+
+
+
+  }
+
+
   
   public void addTokensToPlace(int tokensToAdd, ArrayList<Place> places, String placeID) {
     for (int i=0; i<places.size(); i++) {
