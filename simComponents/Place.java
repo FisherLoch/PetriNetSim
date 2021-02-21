@@ -2,6 +2,7 @@ package simComponents;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.awt.*;
 
 public class Place {
   String ID;
@@ -9,11 +10,16 @@ public class Place {
   ArrayList<String> incomingArcs = new ArrayList<String>();
   int tokens = 0;
   String label;
+  float centreX;
+  float centreY;
+  int radius = 100;
 
   // properties array format: [label]
   public Place(String[] properties) { // constructor
     ID = UUID.randomUUID().toString();
     label = properties[0];
+    centreX = 300;
+    centreY = 300;
   }
 
   public String getID() {
@@ -91,6 +97,12 @@ public class Place {
 
   public void addTokens(int tokensToAdd) { // can use this to add and remove with negative values but might add superfluous removeTokens function for clarity
     tokens = tokens + tokensToAdd;
+  }
+
+
+  public void render(Graphics g) {
+    g.setColor(Color.BLACK);
+		g.drawArc((int)(centreX - radius),(int)(centreY - radius), (int)(radius*2), (int)(radius*2),0,360);
   }
 
 

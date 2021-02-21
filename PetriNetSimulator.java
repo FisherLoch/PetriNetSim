@@ -12,8 +12,12 @@ public class PetriNetSimulator {
     ArrayList<Transition> transitions = new ArrayList<Transition>();
     ArrayList<Place> places = new ArrayList<Place>();
     ArrayList<Arc> arcs = new ArrayList<Arc>();
-    
+ 
+    DiagramCanvas canvas = new DiagramCanvas();
+
+
     JFrame simulator = new JFrame("Petri Net Simulator");
+    //simulator.setLayout(null);
     simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically
     simulator.setSize(1000, 1000);
     JMenuBar menuBar = new JMenuBar();
@@ -26,6 +30,8 @@ public class PetriNetSimulator {
     JMenuItem dispTransitions = new JMenuItem("Display transitions");
     mbDebug.add(dispTransitions);
     dispTransitions.addActionListener(e -> displayTransitionArray(transitions));
+
+    simulator.add(canvas);  
     
 
     // File
@@ -51,7 +57,7 @@ public class PetriNetSimulator {
     mbAdd.add(addTransition);
 
     // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
-    addPlace.addActionListener(e -> addNewPlace(places));
+    addPlace.addActionListener(e -> addNewPlace(places, canvas));
     addTransition.addActionListener(e -> addNewTransition(transitions));
     // addTokens.addActionListner(...
 
@@ -66,7 +72,8 @@ public class PetriNetSimulator {
 
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
-    
+
+    //simulator.setJMenuBar(menuBar);
     simulator.getContentPane().add(BorderLayout.NORTH, menuBar);
     simulator.setVisible(true);
     
@@ -106,10 +113,12 @@ public class PetriNetSimulator {
   // handle source and sink transitions
 
 
-  public static void addNewPlace(ArrayList<Place> places) { 
+  public static void addNewPlace(ArrayList<Place> places, DiagramCanvas canvas) { 
     Place placeToAdd = new Place(new String[] {"Place " + (places.size() + 1)}); // pass in a default label for the new place
     //placeToAdd.addActionListener(e -> placeClicked());
     places.add(placeToAdd);
+    canvas.setPlaces(places);
+
   }
 
   public static void addNewTransition(ArrayList<Transition> transitions) {
