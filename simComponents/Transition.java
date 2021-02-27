@@ -87,6 +87,15 @@ public class Transition {
     }
     return false;
   }
+/*
+  public void render(Graphics g) {
+    // draw and fill rectangle, can use a rotation value to determine the orientation
+    g.setColor(Color.BLACK);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
+		g2.drawArc((int)(centreX - radius),(int)(centreY - radius), (int)(radius*2), (int)(radius*2),0,360);
+  }
+*/
 
 
 }

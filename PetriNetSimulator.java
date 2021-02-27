@@ -76,6 +76,8 @@ public class PetriNetSimulator {
     //simulator.setJMenuBar(menuBar);
     simulator.getContentPane().add(BorderLayout.NORTH, menuBar);
     simulator.setVisible(true);
+
+    //addNewPlace(places, canvas);
     
   }
   
@@ -118,6 +120,7 @@ public class PetriNetSimulator {
     //placeToAdd.addActionListener(e -> placeClicked());
     places.add(placeToAdd);
     canvas.setPlaces(places);
+    canvas.repaint();
 
   }
 

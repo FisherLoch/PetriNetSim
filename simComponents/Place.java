@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.awt.*;
 
+import java.util.regex.*;
+
 public class Place {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
   ArrayList<String> incomingArcs = new ArrayList<String>();
   int tokens = 0;
   String label;
-  float centreX;
-  float centreY;
-  int radius = 100;
+  int centreX;
+  int centreY;
+  int radius = 50;
 
   // properties array format: [label]
   public Place(String[] properties) { // constructor
     ID = UUID.randomUUID().toString();
     label = properties[0];
-    centreX = 300;
-    centreY = 300;
+    tokens = Integer.parseInt(properties[0].replaceAll("\\D+", ""));
+
+    centreX = (int) (Math.random() * 500);
+    centreY = (int) (Math.random() * 500);
   }
 
   public String getID() {
@@ -102,7 +106,38 @@ public class Place {
 
   public void render(Graphics g) {
     g.setColor(Color.BLACK);
-		g.drawArc((int)(centreX - radius),(int)(centreY - radius), (int)(radius*2), (int)(radius*2),0,360);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
+		g2.drawArc((int)(centreX - radius),(int)(centreY - radius), (int)(radius*2), (int)(radius*2),0,360);
+    g2.drawString(label, centreX, centreY - radius - 20);
+    if (tokens < 5) {
+      switch (tokens) {
+        case 1:
+          g2.fillOval(centreX, centreY, 10, 10);
+          break;
+        case 2:
+          g2.fillOval(centreX - 10, centreY - 10, 10, 10);
+          g2.fillOval(centreX + 10, centreY + 10, 10, 10);
+          break;
+        case 3:
+          g2.fillOval(centreX - 10, centreY - 10, 10, 10);
+          g2.fillOval(centreX + 10, centreY - 10, 10, 10);
+          g2.fillOval(centreX + 10, centreY + 10, 10, 10);
+          break;
+        case 4:
+          g2.fillOval(centreX - 10, centreY - 10, 10, 10);
+          g2.fillOval(centreX + 10, centreY - 10, 10, 10);
+          g2.fillOval(centreX + 10, centreY + 10, 10, 10);         
+          g2.fillOval(centreX - 10, centreY + 10, 10, 10);
+          break;
+        default:
+          break;
+      }
+          
+    } else {
+      g2.drawString("Tokens: " + tokens, centreX - 15, centreY);
+    }
+
   }
 
 
