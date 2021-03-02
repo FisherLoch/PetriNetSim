@@ -12,7 +12,7 @@ public class DiagramCanvas extends Canvas {
 
 
   public DiagramCanvas() {
-    setBackground(Color.RED);
+    setBackground(Color.WHITE);
     setSize(500, 500);
   }
 
@@ -36,6 +36,9 @@ public class DiagramCanvas extends Canvas {
     // for all objects to be rendered, render    
     for (int i=0; i<placesRenderList.size(); i++) {
       placesRenderList.get(i).render(g);
+    }
+    for (int i=0; i<transitionsRenderList.size(); i++) {
+      transitionsRenderList.get(i).render(g);
     }
 
   }

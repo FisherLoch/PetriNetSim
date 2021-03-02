@@ -2,18 +2,26 @@ package simComponents;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.awt.*;
 
 public class Transition {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
   ArrayList<String> incomingArcs = new ArrayList<String>();
   String label;
+  int originX;
+  int originY;
+  int width = 20;
+  int height = 80;
 
 
   // properties array format: [label]
   public Transition(String[] properties) { // constructor
     ID = UUID.randomUUID().toString();
     label = properties[0];
+
+    originX = (int) (Math.random() * 500);
+    originY = (int) (Math.random() * 500);
   }
 
   public String getID() {
@@ -87,15 +95,14 @@ public class Transition {
     }
     return false;
   }
-/*
+
   public void render(Graphics g) {
     // draw and fill rectangle, can use a rotation value to determine the orientation
     g.setColor(Color.BLACK);
-    Graphics2D g2 = (Graphics2D) g;
-    g2.setStroke(new BasicStroke(3));
-		g2.drawArc((int)(centreX - radius),(int)(centreY - radius), (int)(radius*2), (int)(radius*2),0,360);
+    g.fillRect(originX, originY, width, height);
+    g.drawString(label, originX - 20, originY - 10);
   }
-*/
+
 
 
 }
