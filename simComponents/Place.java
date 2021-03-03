@@ -18,7 +18,7 @@ public class Place {
 
   // properties array format: [label]
   public Place(String[] properties) { // constructor
-    ID = UUID.randomUUID().toString();
+    ID = "Place" + UUID.randomUUID().toString();
     label = properties[0];
     tokens = Integer.parseInt(properties[0].replaceAll("\\D+", ""));
 
@@ -28,6 +28,26 @@ public class Place {
 
   public String getID() {
     return ID;
+  }
+
+  public void setX(int x) {
+    centreX = x;
+  }
+
+  public int getX() {
+    return centreX;
+  }
+
+  public void setY(int y) {
+    centreY = y;
+  }
+
+  public int getY() {
+    return centreY;
+  }
+
+  public int getRadius() {
+    return radius;
   }
 
   public String getLabel() {

@@ -40,6 +40,34 @@ public class DiagramCanvas extends Canvas {
     for (int i=0; i<transitionsRenderList.size(); i++) {
       transitionsRenderList.get(i).render(g);
     }
+    for (int i=0; i<arcsRenderList.size(); i++) {
+      if (arcsRenderList.get(i).getOrigin().contains("Place")) {
+        PlaceData p = getPlaceData(arcsRenderList.get(i).getOrigin());
+        TransitionData t = getTransitionData(arcsRenderList.get(i).getEndpoint());
+        arcsRenderList.get(i).renderPlace(g, p.getX(), p.getY(), p.getRadius(), t.getX(), t.getY()); // pass relevant rendering data
+      } else {
+        //arcsRenderList.get(i).renderTransition(g, placesRenderList, transitionsRenderList);
+      }
+    }
 
   }
+
+  private PlaceData getPlaceData(String placeID) { 
+    for (int i=0; i<placesRenderList.size(); i++) {
+      if (placesRenderList.get(i).getID() == placeID) {
+        return new PlaceData(placesRenderList.get(i).getX(), placesRenderList.get(i).getY(), placesRenderList.get(i).getRadius());
+      }
+    }
+    return new PlaceData(0, 0, 0);
+  }
+
+  private TransitionData getTransitionData(String transID) {
+    for (int i=0; i<transitionsRenderList.size(); i++) {
+      if (transitionsRenderList.get(i).getID() == transID) {
+        return new TransitionData(transitionsRenderList.get(i).getX(), transitionsRenderList.get(i).getY());
+      }
+    }
+    return new TransitionData(0, 0);
+  }
+
 }

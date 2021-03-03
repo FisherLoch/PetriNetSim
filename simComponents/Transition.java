@@ -17,7 +17,7 @@ public class Transition {
 
   // properties array format: [label]
   public Transition(String[] properties) { // constructor
-    ID = UUID.randomUUID().toString();
+    ID = "Trans" + UUID.randomUUID().toString();
     label = properties[0];
 
     originX = (int) (Math.random() * 500);
@@ -26,6 +26,22 @@ public class Transition {
 
   public String getID() {
     return ID;
+  }
+
+  public void setX(int x) {
+    originX = x;
+  }
+
+  public int getX() {
+    return originX;
+  }
+
+  public void setY(int y) {
+    originY = y;
+  }
+
+  public int getY() {
+    return originY;
   }
 
   public String getLabel() {
