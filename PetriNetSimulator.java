@@ -76,11 +76,15 @@ public class PetriNetSimulator {
     //simulator.setJMenuBar(menuBar);
     simulator.getContentPane().add(BorderLayout.NORTH, menuBar);
     simulator.setVisible(true);
+    addNewPlace(places, canvas);
+    addNewPlace(places, canvas);
+    addNewTransition(transitions, canvas);
+    addNewArc("P", 0, 0, places, transitions, arcs, canvas);
 
     
   }
   
-  public static void addNewArc(String startObj, int transitionIndex, int placeIndex, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {  
+  public static void addNewArc(String startObj, int transitionIndex, int placeIndex, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
     Arc arcToAdd = new Arc();
     
     if (startObj == "T") { // arc originates from transition and is going into a place
@@ -101,6 +105,8 @@ public class PetriNetSimulator {
       arcs.add(arcToAdd);
       
     }
+    canvas.setArcs(arcs);
+    canvas.repaint();
   }
 
   // ######### TODO #############

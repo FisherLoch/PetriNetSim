@@ -44,6 +44,14 @@ public class Transition {
     return originY;
   }
 
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
   public String getLabel() {
     return label;
   }
