@@ -6,35 +6,40 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import simComponents.*;
 
 public class Transition extends JComponent implements ActionListener {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
   ArrayList<String> incomingArcs = new ArrayList<String>();
   String label;
-  volatile int myX = 700;
-  volatile int myY = 700;
+  volatile int myX;
+  volatile int myY;
   int width = 20;
   int height = 80;
   volatile int mouseX = 0;
   volatile int mouseY = 0;
 
 
+  DiagramCanvas canvas;
+
 
   // properties array format: [label]
-  public Transition(String[] properties) { // constructor
+  public Transition(String[] properties, DiagramCanvas c) { // constructor
     ID = "Trans" + UUID.randomUUID().toString();
     label = properties[0];
 
     //originX = (int) (Math.random() * 500);
     //originY = (int) (Math.random() * 500);
-    myX = (int) (Math.random() * 500);
-    myY = (int) (Math.random() * 500);   
+    myX = (int) (Math.random() * 1000);
+    myY = (int) (Math.random() * 1000);   
   
     setBorder(new LineBorder(Color.BLUE, 10));
     setBackground(Color.RED);
     setBounds(myX, myY, width, height);
     setOpaque(false);
+
+    canvas = c;
 
 
     addMouseListener(new MouseListener() {
@@ -53,11 +58,17 @@ public class Transition extends JComponent implements ActionListener {
       }
       public void mouseReleased(MouseEvent e) {
         System.out.println("MouseReleased: T");
+        myX = getX();
+        myY = getY();
+        
+        canvas.repaint();
       }
       public void mouseEntered(MouseEvent e) {
         System.out.println("MouseEntered: T");
       }
-      public void mouseExited(MouseEvent e) {}
+      public void mouseExited(MouseEvent e) {
+        System.out.println("MouseExited: T");
+      }
 
 
 
@@ -69,6 +80,7 @@ public class Transition extends JComponent implements ActionListener {
         int diffY = e.getYOnScreen() - mouseY;
 
         setLocation(myX + diffX, myY + diffY);
+        canvas.repaint();
       }
 
       public void mouseMoved(MouseEvent e) {}
@@ -174,8 +186,8 @@ public class Transition extends JComponent implements ActionListener {
   public void render(Graphics g) {
     // draw and fill rectangle, can use a rotation value to determine the orientation
     g.setColor(Color.BLACK);
-    //g.fillRect(originX, originY, width, height);
-    //g.drawString(label, originX - 20, originY - 10);
+    g.fillRect(myX, myY, width, height);
+    g.drawString(label, myX - 20, myY - 10);
   }
 
 

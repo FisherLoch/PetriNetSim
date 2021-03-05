@@ -33,7 +33,7 @@ public class PetriNetSimulator {
     mbDebug.add(dispTransitions);
     dispTransitions.addActionListener(e -> displayTransitionArray(transitions));
 
-    //simulator.add(canvas);  
+    simulator.add(canvas);  
     
 
     // File
@@ -133,7 +133,7 @@ public class PetriNetSimulator {
   }
 
   public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas, JFrame sim) {
-    Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}); // pass in a default label for the new transition 
+    Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}, canvas); // pass in a default label for the new transition 
     //transitionToAdd.addActionListener(e -> transitionClicked(e));
     transitions.add(transitionToAdd);
     canvas.setTransitions(transitions);
@@ -256,8 +256,8 @@ public class PetriNetSimulator {
 
   // fire transition
 
-  public void fireTransition(ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places, String transitionID) {
-    Transition t = new Transition(new String[] {"placeholder"});
+  public void fireTransition(ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places, String transitionID, DiagramCanvas canvas) {
+    Transition t = new Transition(new String[] {"Placeholder"}, canvas);
     for (int i=0; i<transitions.size(); i++) {
       if (transitions.get(i).getID() == transitionID) {
         t = transitions.get(i);
