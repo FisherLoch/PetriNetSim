@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import simComponents.*;
+import java.awt.event.*;
 
 public class PetriNetSimulator {
   public static void main(String[] args) {
@@ -17,7 +18,8 @@ public class PetriNetSimulator {
 
 
     JFrame simulator = new JFrame("Petri Net Simulator");
-    //simulator.setLayout(null);
+    simulator.setLayout(null);
+
     simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically
     simulator.setSize(1000, 1000);
     JMenuBar menuBar = new JMenuBar();
@@ -31,7 +33,7 @@ public class PetriNetSimulator {
     mbDebug.add(dispTransitions);
     dispTransitions.addActionListener(e -> displayTransitionArray(transitions));
 
-    simulator.add(canvas);  
+    //simulator.add(canvas);  
     
 
     // File
@@ -58,7 +60,7 @@ public class PetriNetSimulator {
 
     // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
     addPlace.addActionListener(e -> addNewPlace(places, canvas));
-    addTransition.addActionListener(e -> addNewTransition(transitions, canvas));
+    addTransition.addActionListener(e -> addNewTransition(transitions, canvas, simulator));
     // addTokens.addActionListner(...
 
     // Edit
@@ -74,13 +76,14 @@ public class PetriNetSimulator {
     menuBar.add(mbAdd);
 
     //simulator.setJMenuBar(menuBar);
-    simulator.getContentPane().add(BorderLayout.NORTH, menuBar);
+    simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
+    /*
     addNewPlace(places, canvas);
     addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
     addNewArc("P", 0, 0, places, transitions, arcs, canvas);
-
+    */
     
   }
   
@@ -129,12 +132,17 @@ public class PetriNetSimulator {
 
   }
 
-  public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas) {
+  public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas, JFrame sim) {
     Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}); // pass in a default label for the new transition 
-    //transitionToAdd.addActionListener(e -> transitionClicked());
+    //transitionToAdd.addActionListener(e -> transitionClicked(e));
     transitions.add(transitionToAdd);
     canvas.setTransitions(transitions);
+    sim.add(transitionToAdd);
     canvas.repaint();
+  }
+
+  public void transitionClicked(ActionEvent e) {
+    System.out.println("Transiotn clicked");
   }
 
 
@@ -283,6 +291,11 @@ public class PetriNetSimulator {
 
 
   }
+
+  // next tick
+  // save
+  // load
+  // new file 
 
 
   
