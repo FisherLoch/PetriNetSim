@@ -16,6 +16,30 @@ public class PetriNetSimulator {
  
     DiagramCanvas canvas = new DiagramCanvas();
 
+ /* 
+    canvas.addMouseListener(new MouseListener() {
+      public void mousePressed(MouseEvent e) {
+      }
+
+
+      public void mouseClicked(MouseEvent e) {
+      }
+      public void mouseReleased(MouseEvent e) {
+        canvas.repaint();
+      }
+
+      public void mouseEntered(MouseEvent e) {
+      }
+      public void mouseExited(MouseEvent e) {
+      }
+
+
+
+    });
+
+*/
+
+
 
     JFrame simulator = new JFrame("Petri Net Simulator");
     simulator.setLayout(null);

@@ -1,19 +1,85 @@
 package simComponents;
 
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 import java.util.ArrayList;
 import simComponents.*;
 
-public class DiagramCanvas extends Canvas {
+public class DiagramCanvas extends JPanel {
   
   ArrayList<Arc> arcsRenderList = new ArrayList<Arc>();
   ArrayList<Place> placesRenderList = new ArrayList<Place>();
   ArrayList<Transition> transitionsRenderList = new ArrayList<Transition>();
 
+  volatile int mouseX;
+  volatile int mouseY;
+
 
   public DiagramCanvas() {
     setBackground(Color.WHITE);
     setSize(500, 500);
+    setBounds(0, 0, 500, 500);
+    setOpaque(true);
+ 
+    addMouseListener(new MouseListener() {
+      public void mousePressed(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+
+        System.out.println("Mouse pressed: T");
+      }
+
+
+      public void mouseClicked(MouseEvent e) {
+        System.out.println("MouseClicked");
+      }
+      public void mouseReleased(MouseEvent e) {
+        System.out.println("MouseReleased");
+        int diffX = e.getX() - mouseX;
+        int diffY = e.getY() - mouseY;
+
+        moveComponent(mouseX, mouseY, diffX, diffY);
+        repaint();
+      }
+
+      public void mouseEntered(MouseEvent e) {
+      }
+      public void mouseExited(MouseEvent e) {
+      }
+
+
+
+    });
+
+    addMouseMotionListener(new MouseMotionListener() {
+      public void mouseDragged(MouseEvent e) {
+        //int diffX = e.getX() - mouseX;
+        //int diffY = e.getY() - mouseY;
+
+        //moveComponent(mouseX, mouseY, diffX, diffY);
+        //repaint();
+
+      }
+
+      public void mouseMoved(MouseEvent e) {}
+    });
+
+
+
+  }
+
+
+  public void moveComponent(int clickX, int clickY, int diffX, int diffY) {
+    System.out.println("ClickX: " + clickX + " ClickY: " + clickY + " DiffX: " + diffX + " DiffY: " + diffY);
+    for (int i=0; i<transitionsRenderList.size(); i++) {
+      if (transitionsRenderList.get(i).inBounds(clickX, clickY)) {
+        transitionsRenderList.get(i).setX(transitionsRenderList.get(i).getX() + diffX);
+        transitionsRenderList.get(i).setY(transitionsRenderList.get(i).getY() + diffY);
+        this.revalidate();
+        break;
+      }
+    }
   }
 
   public static void main(String[] args) {

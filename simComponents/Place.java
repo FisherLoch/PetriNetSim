@@ -22,8 +22,8 @@ public class Place {
     label = properties[0];
     tokens = Integer.parseInt(properties[0].replaceAll("\\D+", ""));
 
-    centreX = (int) (Math.random() * 500);
-    centreY = (int) (Math.random() * 500);
+    centreX = (int) (Math.random() * 400);
+    centreY = (int) (Math.random() * 400);
   }
 
   public String getID() {

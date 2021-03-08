@@ -8,13 +8,14 @@ import javax.swing.*;
 import javax.swing.border.*;
 import simComponents.*;
 
-public class Transition extends JComponent implements ActionListener {
+public class Transition extends JComponent {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
   ArrayList<String> incomingArcs = new ArrayList<String>();
   String label;
   volatile int myX;
   volatile int myY;
+  
   int width = 20;
   int height = 80;
   volatile int mouseX = 0;
@@ -31,16 +32,19 @@ public class Transition extends JComponent implements ActionListener {
 
     //originX = (int) (Math.random() * 500);
     //originY = (int) (Math.random() * 500);
-    myX = (int) (Math.random() * 1000);
-    myY = (int) (Math.random() * 1000);   
-  
-    setBorder(new LineBorder(Color.BLUE, 10));
-    setBackground(Color.RED);
-    setBounds(myX, myY, width, height);
-    setOpaque(false);
+    //myX = (int) (Math.random() * 1000);
+    //myY = (int) (Math.random() * 1000);   
+    myX = 0;
+    myY = 0;
+
+
+    //setBorder(new LineBorder(Color.BLUE, 10));
+    //setBackground(Color.RED);
+    //setBounds(myX, myY, width, height);
+    //setOpaque(false);
 
     canvas = c;
-
+/*
 
     addMouseListener(new MouseListener() {
       public void mousePressed(MouseEvent e) {
@@ -85,28 +89,43 @@ public class Transition extends JComponent implements ActionListener {
 
       public void mouseMoved(MouseEvent e) {}
     });
+
+    */
   }
 
   public String getID() {
     return ID;
   }
-/*
-  public void setX(int x) {
-    originX = x;
-  }
 
-  public int getX() {
-    return originX;
+  public void setX(int x) {
+    myX = x;
   }
 
   public void setY(int y) {
-    originY = y;
+    myY = y;
+  }
+  
+  public int getX() {
+    return myX;
   }
 
+
   public int getY() {
-    return originY;
+    return myY;
   }
-*/
+
+
+  public boolean inBounds(int x, int y) {
+    System.out.println("myX: " + myX + " myY: " + myY);
+    if ((x >= myX) && (x <= myX + width)) {
+      if ((y >= myY) && (y <= myY + height)) {
+        System.out.println("In bounds: " + label);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public int getWidth() {
     return width;
   }
@@ -191,8 +210,8 @@ public class Transition extends JComponent implements ActionListener {
   }
 
 
-  public void actionPerformed(ActionEvent e) {
-    System.out.println("Transition action: " + e);
-  }
+ // public void actionPerformed(ActionEvent e) {
+ //   System.out.println("Transition action: " + e);
+ // }
 
 }
