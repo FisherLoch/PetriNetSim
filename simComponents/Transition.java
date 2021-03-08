@@ -32,10 +32,10 @@ public class Transition extends JComponent {
 
     //originX = (int) (Math.random() * 500);
     //originY = (int) (Math.random() * 500);
-    //myX = (int) (Math.random() * 1000);
-    //myY = (int) (Math.random() * 1000);   
-    myX = 0;
-    myY = 0;
+    myX = (int) (Math.random() * 500);
+    myY = (int) (Math.random() * 500);   
+    //myX = 0;
+    //myY = 0;
 
 
     //setBorder(new LineBorder(Color.BLUE, 10));
