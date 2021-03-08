@@ -288,14 +288,16 @@ public class PetriNetSimulator {
       }
     }
 
-
+    // run some sort of rendering function for a different colour transition?
 
   }
 
   // next tick
+  // run model (x amount of ticks?)
   // save
   // load
   // new file 
+
 
 
   
