@@ -13,10 +13,7 @@ public class PetriNetSimulator {
     ArrayList<Transition> transitions = new ArrayList<Transition>();
     ArrayList<Place> places = new ArrayList<Place>();
     ArrayList<Arc> arcs = new ArrayList<Arc>();
- 
-    DiagramCanvas canvas = new DiagramCanvas();
-
- /* 
+  /* 
     canvas.addMouseListener(new MouseListener() {
       public void mousePressed(MouseEvent e) {
       }
@@ -42,6 +39,8 @@ public class PetriNetSimulator {
 
 
     JFrame simulator = new JFrame("Petri Net Simulator");
+    DiagramCanvas canvas = new DiagramCanvas(simulator);
+
     simulator.setLayout(null);
 
     simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically

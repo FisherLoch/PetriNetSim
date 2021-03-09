@@ -11,16 +11,19 @@ public class DiagramCanvas extends JPanel {
   ArrayList<Arc> arcsRenderList = new ArrayList<Arc>();
   ArrayList<Place> placesRenderList = new ArrayList<Place>();
   ArrayList<Transition> transitionsRenderList = new ArrayList<Transition>();
+  
+  JFrame sim;
 
   volatile int mouseX;
   volatile int mouseY;
 
 
-  public DiagramCanvas() {
+  public DiagramCanvas(JFrame s) {
     setBackground(Color.WHITE);
     setSize(500, 500);
     setBounds(0, 0, 500, 500);
     setOpaque(true);
+    sim = s;
  
     addMouseListener(new MouseListener() {
       public void mousePressed(MouseEvent e) {
@@ -33,6 +36,7 @@ public class DiagramCanvas extends JPanel {
 
       public void mouseClicked(MouseEvent e) {
         System.out.println("MouseClicked");
+       // repaint();
       }
       public void mouseReleased(MouseEvent e) {
         System.out.println("MouseReleased");
@@ -40,7 +44,7 @@ public class DiagramCanvas extends JPanel {
         int diffY = e.getY() - mouseY;
 
         moveComponent(mouseX, mouseY, diffX, diffY);
-        repaint();
+        //repaint();
       }
 
       public void mouseEntered(MouseEvent e) {
@@ -54,11 +58,6 @@ public class DiagramCanvas extends JPanel {
 
     addMouseMotionListener(new MouseMotionListener() {
       public void mouseDragged(MouseEvent e) {
-        //int diffX = e.getX() - mouseX;
-        //int diffY = e.getY() - mouseY;
-
-        //moveComponent(mouseX, mouseY, diffX, diffY);
-        //repaint();
 
       }
 
@@ -76,7 +75,7 @@ public class DiagramCanvas extends JPanel {
       if (transitionsRenderList.get(i).inBounds(clickX, clickY)) {
         transitionsRenderList.get(i).setX(transitionsRenderList.get(i).getX() + diffX);
         transitionsRenderList.get(i).setY(transitionsRenderList.get(i).getY() + diffY);
-        this.revalidate();
+        sim.repaint();
         break;
       }
     }
