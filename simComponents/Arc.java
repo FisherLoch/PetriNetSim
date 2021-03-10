@@ -80,12 +80,37 @@ public class Arc {
 
     System.out.println("Angle: " + angle);
 */
+    double angle = 0;
+    if (endpointY < originY) {
+      if (endpointX < originX) {
+        // up left
+        angle = 270 + Math.atan((originY - endpointY)/(originX - endpointX));
+      } else {
+        // up right
+        angle = Math.atan((endpointX - originX)/(originY - endpointY));
+      }
+    } else {
+      if (endpointX < originX) {
+        // down left
+        angle = 180 + Math.atan((originX - endpointX)/(endpointY - originY));
+      } else {
+        // down right
+        angle = 90 + Math.atan((endpointY - originY)/(endpointX - originX));
+      }
+    }
 
 
-    double angle = Math.atan((endpointY - originY)/(endpointX - originX));
+    //double angle = Math.atan((endpointY - originY)/(endpointX - originX));
     // replace with rotation matrix calculation
-    g2.drawLine((int) Math.round(originX + radius * Math.cos(angle)), (int) Math.round(originY + radius * Math.sin(angle)), endpointX, endpointY);
-   // g2.drawLine(
+    int arcLength = (int) Math.round(Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2)));
+    // coords are now (0, arcLength), might need to invert line as canvas coords have inverted y axis
+
+    int endXOffset = (int) Math.round(arcLength * Math.sin(angle));
+    int endYOffset = (int) Math.round(arcLength * Math.cos(angle));
+
+
+
+    g2.drawLine(originX, originY, originX + endXOffset, originY + endYOffset);
 
   }
 
