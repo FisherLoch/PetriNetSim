@@ -8,13 +8,13 @@ import javax.swing.*;
 import javax.swing.border.*;
 import simComponents.*;
 
-public class Transition extends JComponent {
+public class Transition {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
   ArrayList<String> incomingArcs = new ArrayList<String>();
   String label;
-  volatile int myX;
-  volatile int myY;
+  volatile int originX;
+  volatile int originY;
   
   int width = 20;
   int height = 80;
@@ -30,8 +30,8 @@ public class Transition extends JComponent {
     ID = "Trans" + UUID.randomUUID().toString();
     label = properties[0];
 
-    myX = (int) (Math.random() * 500);
-    myY = (int) (Math.random() * 500);   
+    originX = (int) (Math.random() * 500);
+    originY = (int) (Math.random() * 500);   
 
 
     canvas = c;
@@ -43,26 +43,26 @@ public class Transition extends JComponent {
   }
 
   public void setX(int x) {
-    myX = x;
+    originX = x;
   }
 
   public void setY(int y) {
-    myY = y;
+    originY = y;
   }
   
   public int getX() {
-    return myX;
+    return originX;
   }
 
 
   public int getY() {
-    return myY;
+    return originY;
   }
 
 
   public boolean inBounds(int x, int y) {
-    if ((x >= myX) && (x <= myX + width)) {
-      if ((y >= myY) && (y <= myY + height)) {
+    if ((x >= originX) && (x <= originX + width)) {
+      if ((y >= originY) && (y <= originY + height)) {
         return true;
       }
     }
@@ -144,8 +144,8 @@ public class Transition extends JComponent {
   public void render(Graphics g) {
     // draw and fill rectangle, can use a rotation value to determine the orientation
     g.setColor(Color.BLACK);
-    g.fillRect(myX, myY, width, height);
-    g.drawString(label, myX - 20, myY - 10);
+    g.fillRect(originX, originY, width, height);
+    g.drawString(label, originX - 20, originY - 10);
   }
 
 
