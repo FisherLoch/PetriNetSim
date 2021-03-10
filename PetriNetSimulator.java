@@ -83,7 +83,7 @@ public class PetriNetSimulator {
 
     // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
     addPlace.addActionListener(e -> addNewPlace(places, canvas));
-    addTransition.addActionListener(e -> addNewTransition(transitions, canvas, simulator));
+    addTransition.addActionListener(e -> addNewTransition(transitions, canvas));
     // addTokens.addActionListner(...
 
     // Edit
@@ -101,11 +101,12 @@ public class PetriNetSimulator {
     //simulator.setJMenuBar(menuBar);
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
-    /*
+   /* 
     addNewPlace(places, canvas);
     addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
     addNewArc("P", 0, 0, places, transitions, arcs, canvas);
+    simulator.repaint();
     */
     
   }
@@ -155,12 +156,11 @@ public class PetriNetSimulator {
 
   }
 
-  public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas, JFrame sim) {
+  public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas) {
     Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}, canvas); // pass in a default label for the new transition 
     //transitionToAdd.addActionListener(e -> transitionClicked(e));
     transitions.add(transitionToAdd);
     canvas.setTransitions(transitions);
-    sim.add(transitionToAdd);
     canvas.repaint();
   }
 

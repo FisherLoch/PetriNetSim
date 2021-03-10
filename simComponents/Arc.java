@@ -61,9 +61,35 @@ public class Arc {
     g.setColor(Color.BLACK);
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(3));
+
+  /* 
+    double sideX = 30.0;
+    double sideY = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2));
+    System.out.println("Side Y: " + sideY);
+    double sideZ = Math.sqrt(Math.pow(endpointY - (originY + 30), 2) + Math.pow(endpointX - endpointY, 2));
+    System.out.println("Side Z: " + sideZ);
+
+    double angle = Math.acos((Math.pow(sideX, 2) + Math.pow(sideY, 2) - Math.pow(sideZ, 2))/(2 * sideX * sideY));
+
+   
+    if (originX >= endpointX) { // triangle faces left
+      angle = 360.0 - angle;
+    } else { // triangle faces right
+      // leave angle as it is
+    }
+
+    System.out.println("Angle: " + angle);
+*/
+
+
     double angle = Math.atan((endpointY - originY)/(endpointX - originX));
+    // replace with rotation matrix calculation
     g2.drawLine((int) Math.round(originX + radius * Math.cos(angle)), (int) Math.round(originY + radius * Math.sin(angle)), endpointX, endpointY);
+   // g2.drawLine(
 
   }
+
+
+  //public void renderTransition(...)
 
 }

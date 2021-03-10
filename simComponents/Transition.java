@@ -30,67 +30,12 @@ public class Transition extends JComponent {
     ID = "Trans" + UUID.randomUUID().toString();
     label = properties[0];
 
-    //originX = (int) (Math.random() * 500);
-    //originY = (int) (Math.random() * 500);
     myX = (int) (Math.random() * 500);
     myY = (int) (Math.random() * 500);   
-    //myX = 0;
-    //myY = 0;
 
-
-    //setBorder(new LineBorder(Color.BLUE, 10));
-    //setBackground(Color.RED);
-    //setBounds(myX, myY, width, height);
-    //setOpaque(false);
 
     canvas = c;
-/*
 
-    addMouseListener(new MouseListener() {
-      public void mousePressed(MouseEvent e) {
-        mouseX = e.getXOnScreen();
-        mouseY = e.getYOnScreen();
-
-        myX = getX();
-        myY = getY();
-        System.out.println("Mouse pressed: T");
-      }
-
-
-      public void mouseClicked(MouseEvent e) {
-        System.out.println("MouseClicked: T");
-      }
-      public void mouseReleased(MouseEvent e) {
-        System.out.println("MouseReleased: T");
-        myX = getX();
-        myY = getY();
-        
-        canvas.repaint();
-      }
-      public void mouseEntered(MouseEvent e) {
-        System.out.println("MouseEntered: T");
-      }
-      public void mouseExited(MouseEvent e) {
-        System.out.println("MouseExited: T");
-      }
-
-
-
-    });
-
-    addMouseMotionListener(new MouseMotionListener() {
-      public void mouseDragged(MouseEvent e) {
-        int diffX = e.getXOnScreen() - mouseX;
-        int diffY = e.getYOnScreen() - mouseY;
-
-        setLocation(myX + diffX, myY + diffY);
-        canvas.repaint();
-      }
-
-      public void mouseMoved(MouseEvent e) {}
-    });
-
-    */
   }
 
   public String getID() {
@@ -116,10 +61,8 @@ public class Transition extends JComponent {
 
 
   public boolean inBounds(int x, int y) {
-    System.out.println("myX: " + myX + " myY: " + myY);
     if ((x >= myX) && (x <= myX + width)) {
       if ((y >= myY) && (y <= myY + height)) {
-        System.out.println("In bounds: " + label);
         return true;
       }
     }
@@ -156,8 +99,6 @@ public class Transition extends JComponent {
   }
 
   public void removeIncomingArc(String arcID) {
-  //public void removeIncomingArc(int arcIndex) {
-    //incomingArcs.remove(arcIndex);
     for (int i=0; i<incomingArcs.size(); i++) {
       if (incomingArcs.get(i) == arcID) {
         incomingArcs.remove(i);
@@ -171,8 +112,6 @@ public class Transition extends JComponent {
   }
 
   public void removeOutgoingArc(String arcID) {
-  //public void removeOutgoingArc(int arcIndex) {
-    //outgoingArcs.remove(arcIndex);
     for (int i=0; i<outgoingArcs.size(); i++) {
       if (outgoingArcs.get(i) == arcID) {
         outgoingArcs.remove(i);
@@ -210,8 +149,5 @@ public class Transition extends JComponent {
   }
 
 
- // public void actionPerformed(ActionEvent e) {
- //   System.out.println("Transition action: " + e);
- // }
 
 }

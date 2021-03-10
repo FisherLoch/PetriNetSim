@@ -29,22 +29,15 @@ public class DiagramCanvas extends JPanel {
       public void mousePressed(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-
-        System.out.println("Mouse pressed: T");
       }
 
 
       public void mouseClicked(MouseEvent e) {
-        System.out.println("MouseClicked");
-       // repaint();
       }
       public void mouseReleased(MouseEvent e) {
-        System.out.println("MouseReleased");
         int diffX = e.getX() - mouseX;
         int diffY = e.getY() - mouseY;
-
         moveComponent(mouseX, mouseY, diffX, diffY);
-        //repaint();
       }
 
       public void mouseEntered(MouseEvent e) {
@@ -57,10 +50,7 @@ public class DiagramCanvas extends JPanel {
     });
 
     addMouseMotionListener(new MouseMotionListener() {
-      public void mouseDragged(MouseEvent e) {
-
-      }
-
+      public void mouseDragged(MouseEvent e) {}
       public void mouseMoved(MouseEvent e) {}
     });
 
@@ -70,15 +60,24 @@ public class DiagramCanvas extends JPanel {
 
 
   public void moveComponent(int clickX, int clickY, int diffX, int diffY) {
-    System.out.println("ClickX: " + clickX + " ClickY: " + clickY + " DiffX: " + diffX + " DiffY: " + diffY);
     for (int i=0; i<transitionsRenderList.size(); i++) {
       if (transitionsRenderList.get(i).inBounds(clickX, clickY)) {
         transitionsRenderList.get(i).setX(transitionsRenderList.get(i).getX() + diffX);
         transitionsRenderList.get(i).setY(transitionsRenderList.get(i).getY() + diffY);
         sim.repaint();
-        break;
+        return;
       }
     }
+
+    for (int i=0; i<placesRenderList.size(); i++) {
+      if (placesRenderList.get(i).inBounds(clickX, clickY)) {
+        placesRenderList.get(i).setX(placesRenderList.get(i).getX() + diffX);
+        placesRenderList.get(i).setY(placesRenderList.get(i).getY() + diffY);
+        sim.repaint();
+        return;
+      }
+    }
+
   }
 
   public static void main(String[] args) {
@@ -109,7 +108,7 @@ public class DiagramCanvas extends JPanel {
       if (arcsRenderList.get(i).getOrigin().contains("Place")) {
         PlaceData p = getPlaceData(arcsRenderList.get(i).getOrigin());
         TransitionData t = getTransitionData(arcsRenderList.get(i).getEndpoint());
-        arcsRenderList.get(i).renderPlace(g, p.getX(), p.getY(), p.getRadius(), t.getX() + (t.getWidth()/2), t.getY() + (t.getHeight()/2)); // pass relevant rendering data
+        arcsRenderList.get(i).renderPlace(g, p.getX(), p.getY(), p.getRadius(), t.getX(), t.getY() + (t.getHeight()/2)); // pass relevant rendering data
       } else {
         //arcsRenderList.get(i).renderTransition(g, placesRenderList, transitionsRenderList);
       }

@@ -12,8 +12,8 @@ public class Place {
   ArrayList<String> incomingArcs = new ArrayList<String>();
   int tokens = 0;
   String label;
-  int centreX;
-  int centreY;
+  volatile int centreX;
+  volatile int centreY;
   int radius = 50;
 
   // properties array format: [label]
@@ -68,6 +68,13 @@ public class Place {
 
   public ArrayList<String> getOutgoingArcsList() {
     return outgoingArcs;
+  }
+
+  public boolean inBounds(int x, int y) {
+    if (Math.pow((x - centreX), 2) + Math.pow((y - centreY), 2) <= Math.pow(radius, 2)) {
+      return true;
+    }
+    return false;
   }
 
   public boolean containsOutgoingArc(String arcID) {
