@@ -62,55 +62,36 @@ public class Arc {
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(3));
 
-  /* 
-    double sideX = 30.0;
+   
+    double sideX = originY;
     double sideY = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2));
     System.out.println("Side Y: " + sideY);
-    double sideZ = Math.sqrt(Math.pow(endpointY - (originY + 30), 2) + Math.pow(endpointX - endpointY, 2));
+    double sideZ = Math.sqrt(Math.pow(endpointY, 2) + Math.pow(originX - endpointX, 2));
+    if ((originY - endpointY) > 0) {
+      sideZ = Math.sqrt(Math.pow(originY - endpointY, 2) + Math.pow(originX - endpointX, 2));
+    }
     System.out.println("Side Z: " + sideZ);
 
     double angle = Math.acos((Math.pow(sideX, 2) + Math.pow(sideY, 2) - Math.pow(sideZ, 2))/(2 * sideX * sideY));
-
    
     if (originX >= endpointX) { // triangle faces left
-      angle = 360.0 - angle;
-    } else { // triangle faces right
       // leave angle as it is
+    } else { // triangle faces right
+      angle = 2*Math.PI - angle;
     }
 
     System.out.println("Angle: " + angle);
-*/
-    double angle = 0;
-    if (endpointY < originY) {
-      if (endpointX < originX) {
-        // up left
-        angle = 270 + Math.atan((originY - endpointY)/(originX - endpointX));
-      } else {
-        // up right
-        angle = Math.atan((endpointX - originX)/(originY - endpointY));
-      }
-    } else {
-      if (endpointX < originX) {
-        // down left
-        angle = 180 + Math.atan((originX - endpointX)/(endpointY - originY));
-      } else {
-        // down right
-        angle = 90 + Math.atan((endpointY - originY)/(endpointX - originX));
-      }
-    }
 
 
     //double angle = Math.atan((endpointY - originY)/(endpointX - originX));
     // replace with rotation matrix calculation
-    int arcLength = (int) Math.round(Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2)));
+    //int arcLength = -(int) Math.round(Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2)));
     // coords are now (0, arcLength), might need to invert line as canvas coords have inverted y axis
 
-    int endXOffset = (int) Math.round(arcLength * Math.sin(angle));
-    int endYOffset = (int) Math.round(arcLength * Math.cos(angle));
+    int endXOffset = (int) Math.round(-radius * Math.sin(angle));
+    int endYOffset = (int) Math.round(-radius * Math.cos(angle));
 
-
-
-    g2.drawLine(originX, originY, originX + endXOffset, originY + endYOffset);
+    g2.drawLine(endXOffset + originX, endYOffset + originY, endpointX, endpointY);
 
   }
 

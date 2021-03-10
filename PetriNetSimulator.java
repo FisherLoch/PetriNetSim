@@ -103,7 +103,7 @@ public class PetriNetSimulator {
     simulator.setVisible(true);
     
     addNewPlace(places, canvas);
-    addNewPlace(places, canvas);
+    //addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
     addNewArc("P", 0, 0, places, transitions, arcs, canvas);
     simulator.repaint();
