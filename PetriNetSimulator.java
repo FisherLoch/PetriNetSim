@@ -95,8 +95,11 @@ public class PetriNetSimulator {
     mbEdit.add(changeLabel);
     mbEdit.add(addWeight);
 
+    changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places));
+
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
+    menuBar.add(mbEdit);
 
     //simulator.setJMenuBar(menuBar);
     simulator.setJMenuBar(menuBar);
@@ -110,6 +113,62 @@ public class PetriNetSimulator {
     
     
   }
+
+  public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places) {
+    JFrame popupMenu = new JFrame(title);
+    popupMenu.setLayout(null);
+    JTextField orig = new JTextField(20);
+    JLabel label1 = new JLabel(l1);
+    JTextField newVal = new JTextField(20);
+    JLabel label2 = new JLabel(l2);
+
+    JButton close = new JButton("Accept");
+
+    popupMenu.add(orig);
+    popupMenu.add(label1);
+    popupMenu.add(newVal);
+    popupMenu.add(label2);
+    popupMenu.add(close);
+    
+
+    orig.setSize(200, 30);
+    orig.setLocation(200, 50);
+
+    label1.setSize(100, 30);
+    label1.setLocation(100, 50);
+
+    newVal.setSize(200, 30);
+    newVal.setLocation(200, 100);
+
+    label2.setSize(100, 30);
+    label2.setLocation(100, 100);
+
+    close.setSize(100, 20);
+    close.setLocation(200, 200);
+    
+    close.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        String origText = orig.getText();
+        String newText = newVal.getText();
+        //System.out.println("orig: " + origText);
+        //System.out.println("new: " + newText);
+        if (title == "Change label") {
+          changePlaceLabel(newText, places, origText);
+        }
+        popupMenu.dispose();
+        sim.repaint();
+      }
+    });
+
+    popupMenu.setSize(500, 300);
+    popupMenu.setVisible(true);
+    popupMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+  }
+
+
+
   
   public static void addNewArc(String startObj, int transitionIndex, int placeIndex, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
     Arc arcToAdd = new Arc();
@@ -322,7 +381,7 @@ public class PetriNetSimulator {
 
 
   
-  public void addTokensToPlace(int tokensToAdd, ArrayList<Place> places, String placeID) {
+  public static void addTokensToPlace(int tokensToAdd, ArrayList<Place> places, String placeID) {
     for (int i=0; i<places.size(); i++) {
       if (places.get(i).getID() == placeID) {
         places.get(i).addTokens(tokensToAdd);
@@ -332,7 +391,7 @@ public class PetriNetSimulator {
   }
 
 
-  public void changeArcWeight(int newWeight, ArrayList<Arc> arcs, String arcID) {
+  public static void changeArcWeight(int newWeight, ArrayList<Arc> arcs, String arcID) {
     for (int i=0; i<arcs.size(); i++) {
       if (arcs.get(i).getID() == arcID) {
         arcs.get(i).setWeight(newWeight);
@@ -341,7 +400,7 @@ public class PetriNetSimulator {
     }
   }
 
-  public void changeArcLabel(String newLabel, ArrayList<Arc> arcs, String arcID) {
+  public static void changeArcLabel(String newLabel, ArrayList<Arc> arcs, String arcID) {
     for (int i=0; i<arcs.size(); i++) {
       if (arcs.get(i).getID() == arcID) {
         arcs.get(i).setLabel(newLabel);
@@ -350,16 +409,16 @@ public class PetriNetSimulator {
     }
   }
 
-  public void changePlaceLabel(String newLabel, ArrayList<Place> places, String placeID) {
+  public static void changePlaceLabel(String newLabel, ArrayList<Place> places, String origLabel) {
     for (int i=0; i<places.size(); i++) {
-      if (places.get(i).getID() == placeID) {
+      if (places.get(i).getLabel().equals(origLabel)) {
         places.get(i).setLabel(newLabel);
         break;
       }
     }
   }
 
-  public void changeTransitionLabel(String newLabel, ArrayList<Transition> transitions, String transitionID) {
+  public static void changeTransitionLabel(String newLabel, ArrayList<Transition> transitions, String transitionID) {
     for (int i=0; i<transitions.size(); i++) {
       if (transitions.get(i).getID() == transitionID) {
         transitions.get(i).setLabel(newLabel);
