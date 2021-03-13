@@ -110,7 +110,9 @@ public class DiagramCanvas extends JPanel {
         TransitionData t = getTransitionData(arcsRenderList.get(i).getEndpoint());
         arcsRenderList.get(i).renderPlace(g, p.getX(), p.getY(), p.getRadius(), t.getX(), t.getY() + (t.getHeight()/2)); // pass relevant rendering data
       } else {
-        //arcsRenderList.get(i).renderTransition(g, placesRenderList, transitionsRenderList);
+        PlaceData p = getPlaceData(arcsRenderList.get(i).getEndpoint());
+        TransitionData t = getTransitionData(arcsRenderList.get(i).getOrigin());
+        arcsRenderList.get(i).renderTransition(g, t.getX() + (t.getWidth()/2), t.getY() + (t.getHeight()/2), p.getRadius(), p.getX(), p.getY());
       }
     }
 

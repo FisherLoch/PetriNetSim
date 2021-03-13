@@ -110,7 +110,7 @@ public class PetriNetSimulator {
     addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
     addNewTransition(transitions, canvas);
-    //addNewArc("P", "Place 1", "Transition 1", places, transitions, arcs, canvas);
+    //addNewArc("P", "Transition 1", "Place 1", places, transitions, arcs, canvas);
     simulator.repaint();
     
     
@@ -217,7 +217,7 @@ public class PetriNetSimulator {
 
           if (doesPlaceExist(places, origText)) {
             if (doesTransitionExist(transitions, newText)) {
-              addNewArc("P", origText, newText, places, transitions, arcs, canvas);
+              addNewArc("P", newText, origText, places, transitions, arcs, canvas);
             } else {
               callErrorBox("Label 2 does not match a transition");
             }
@@ -259,51 +259,52 @@ public class PetriNetSimulator {
   public static void addNewArc(String startObj, String transitionLabel, String placeLabel, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
     Arc arcToAdd = new Arc(new String[] {"Arc " + (arcs.size() + 1)});
 
-    System.out.println("tL: " + transitionLabel + " pL: " + placeLabel);
+    //System.out.println("tL: " + transitionLabel + " pL: " + placeLabel);
     
     if (startObj.equals("T")) { // arc originates from transition and is going into a place
 
      // change to be based on labels for adding 
-     System.out.println("startObj: " + startObj);
+    // System.out.println("startObj: " + startObj);
 
       for (int i=0; i<transitions.size(); i++) {
         if (transitions.get(i).getLabel().equals(transitionLabel)) {
-          System.out.println("Transition with label: " + transitionLabel + " found");
+        //  System.out.println("Transition with label: " + transitionLabel + " found");
           transitions.get(i).addOutgoingArc(arcToAdd.getID());
           arcToAdd.setOrigin(transitions.get(i).getID());
-          
+          break;
         }
       }
       for (int i=0; i<places.size(); i++) {
         if (places.get(i).getLabel().equals(placeLabel)) {
-          System.out.println("Place with label: " + placeLabel + " found");
+        //  System.out.println("Place with label: " + placeLabel + " found");
           places.get(i).addIncomingArc(arcToAdd.getID());
           arcToAdd.setEndpoint(places.get(i).getID());
-          
+          break;
         }
       }
       arcs.add(arcToAdd);
       
     } else {
-     System.out.println("startObj: " + startObj);
+   //  System.out.println("startObj: " + startObj);
       
-      for (int i=0; i<transitions.size(); i++) {
-        if (transitions.get(i).getLabel().equals(transitionLabel)) {
-          System.out.println("Transition with label: " + transitionLabel + " found");
-          transitions.get(i).addIncomingArc(arcToAdd.getID());
-          arcToAdd.setEndpoint(transitions.get(i).getID());
-          
-        }
-      }
       for (int i=0; i<places.size(); i++) {
+       // System.out.println("Place label: " + i + ": " + places.get(i).getLabel() + ", " + (places.get(i).getLabel() == placeLabel));
         if (places.get(i).getLabel().equals(placeLabel)) {
-          System.out.println("Place with label: " + placeLabel + " found");
+        //  System.out.println("Place with label: " + placeLabel + " found");
           places.get(i).addOutgoingArc(arcToAdd.getID());
           arcToAdd.setOrigin(places.get(i).getID());
-          
+          break;
         }
       }
-
+      for (int i=0; i<transitions.size(); i++) {
+     //   System.out.println("Transition label: " + i + ": " + transitions.get(i).getLabel());
+        if (transitions.get(i).getLabel().equals(transitionLabel)) {
+         // System.out.println("Transition with label: " + transitionLabel + " found");
+          transitions.get(i).addIncomingArc(arcToAdd.getID());
+          arcToAdd.setEndpoint(transitions.get(i).getID());
+          break;
+        }
+      }
 /*
       places.get(placeIndex).addOutgoingArc(arcToAdd.getID());
       arcToAdd.setOrigin(places.get(placeIndex).getID());

@@ -102,8 +102,18 @@ public class Arc {
     g2.drawString(Integer.toString(weight), midX, midY + 20);
 
   }
+// for both renders, add arrowhead
+
+  public void renderTransition(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
+
+    g.setColor(Color.BLACK);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
 
 
-  //public void renderTransition(...)
+    // get angle and offset endpoint to edge of radius
+    
+    g2.drawLine(originX, originY, endpointX, endpointY);
+  }
 
 }
