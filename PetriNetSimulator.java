@@ -81,40 +81,65 @@ public class PetriNetSimulator {
     mbAdd.add(addPlace);
     mbAdd.add(addTransition);
 
-    // addArc.addActionListener(e -> addNewArc(arcs)); // either pass in origin and destination at this point or add a default arc and add the origin and destination later on
+    addArc.addActionListener(e -> callPopupMenu("Add new arc", simulator, "Label of Origin:", "Label of endpoint:", places, transitions, arcs, canvas)); 
     addPlace.addActionListener(e -> addNewPlace(places, canvas));
     addTransition.addActionListener(e -> addNewTransition(transitions, canvas));
-    // addTokens.addActionListner(...
 
     // Edit
     JMenu mbEdit = new JMenu("EDIT");
-    JMenuItem addTokens = new JMenuItem("Add tokens");
     JMenuItem changeLabel = new JMenuItem("Change label");
-    JMenuItem addWeight = new JMenuItem("Add weight");
-    mbEdit.add(addTokens);
+    JMenuItem setWeight = new JMenuItem("Set arc weight");
+    JMenuItem setTokens = new JMenuItem("Set tokens");
+    mbEdit.add(setTokens);
     mbEdit.add(changeLabel);
-    mbEdit.add(addWeight);
+    mbEdit.add(setWeight);
 
-    changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places));
+    changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places, transitions, arcs, canvas));
+    setWeight.addActionListener(e -> callPopupMenu("Set new arc weight", simulator, "Arc Label:", "New weight:", places, transitions, arcs, canvas));
+    setTokens.addActionListener(e -> callPopupMenu("Set new tokens in Place", simulator, "Place Label:", "New tokens:", places, transitions, arcs, canvas));
+    
 
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
     menuBar.add(mbEdit);
 
-    //simulator.setJMenuBar(menuBar);
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
     
     addNewPlace(places, canvas);
-    //addNewPlace(places, canvas);
+    addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
-    addNewArc("P", 0, 0, places, transitions, arcs, canvas);
+    addNewTransition(transitions, canvas);
+    //addNewArc("P", "Place 1", "Transition 1", places, transitions, arcs, canvas);
     simulator.repaint();
     
     
   }
 
-  public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places) {
+  public static void callErrorBox(String eMsg) {
+    JFrame eBox = new JFrame("Error");
+    eBox.setLayout(null);
+    JButton close = new JButton("Close");
+    JLabel errMessage = new JLabel(eMsg);
+
+    eBox.add(close);
+    eBox.add(errMessage);
+    eBox.setSize(300, 300);
+
+    close.setSize(100, 50);
+    close.setLocation(100, 120);
+    errMessage.setSize(200, 50);
+    errMessage.setLocation(50, 70);
+    eBox.setVisible(true);
+    close.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        eBox.dispose();
+      }
+    });
+    eBox.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  }
+
+  public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
     JFrame popupMenu = new JFrame(title);
     popupMenu.setLayout(null);
     JTextField orig = new JTextField(20);
@@ -152,9 +177,63 @@ public class PetriNetSimulator {
         String newText = newVal.getText();
         //System.out.println("orig: " + origText);
         //System.out.println("new: " + newText);
-        if (title == "Change label") {
-          changePlaceLabel(newText, places, origText);
+
+
+        // remove arc, place, transition (removeItemWithLabel?)
+        // add arc, place label to transition or opposite check
+
+        // check inputs here
+        if (title.equals("Change label")) {
+          changeLabel(origText, newText, places, transitions, arcs);
+        } else if (title.equals("Set new arc weight")) {
+          if (!doesArcExist(arcs, origText)) {
+            callErrorBox("Label does not match any arc");
+          } else if (!isNumeric(newText)) {
+            callErrorBox("           Not a number");
+          } else if (Integer.parseInt(newText) < 1) {
+            callErrorBox("Number cannot be less than 1");
+          } else {
+            setArcWeight(Integer.parseInt(newText), arcs, origText);
+          }
+        } else if (title.equals("Set new tokens in Place")) {
+           if (!doesPlaceExist(places, origText)) {
+              callErrorBox("Label does not match any place");
+           } else if (!isNumeric(newText)) {
+              callErrorBox("         Not a number");
+           } else if (Integer.parseInt(newText) < 0) {
+              callErrorBox("Number cannot be less than 0");
+           } else {
+              setTokensInPlace(Integer.parseInt(newText), places, origText);
+           }
+        } else if (title.equals("Add new arc")) {
+          // check if orig label matches place
+          // if it does, check that new matches a transition
+          // add arc with default weight/label, might make a new menu specifially for adding arc with more options
+          
+          // if not, check if it matches a transition
+          // if it does, check it matches a place
+          // add arc with default weight/label
+
+
+          if (doesPlaceExist(places, origText)) {
+            if (doesTransitionExist(transitions, newText)) {
+              addNewArc("P", origText, newText, places, transitions, arcs, canvas);
+            } else {
+              callErrorBox("Label 2 does not match a transition");
+            }
+
+          } else if (doesTransitionExist(transitions, origText)) {
+              if (doesPlaceExist(places, newText)) {
+                addNewArc("T", origText, newText, places, transitions, arcs, canvas); 
+              } else {
+                callErrorBox("Label 2 does not match a place");
+              }
+            
+          } else {
+            callErrorBox("Label 1 does not match any item");
+          }
         }
+
         popupMenu.dispose();
         sim.repaint();
       }
@@ -167,27 +246,70 @@ public class PetriNetSimulator {
 
   }
 
+  public static boolean isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return s.matches("\\d+");
+  }
+
 
 
   
-  public static void addNewArc(String startObj, int transitionIndex, int placeIndex, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
-    Arc arcToAdd = new Arc();
-    
-    if (startObj == "T") { // arc originates from transition and is going into a place
-      
-      transitions.get(transitionIndex).addOutgoingArc(arcToAdd.getID());
-      arcToAdd.setOrigin(transitions.get(transitionIndex).getID());
-      places.get(placeIndex).addIncomingArc(arcToAdd.getID());
-      arcToAdd.setEndpoint(places.get(placeIndex).getID());
+  public static void addNewArc(String startObj, String transitionLabel, String placeLabel, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
+    Arc arcToAdd = new Arc(new String[] {"Arc " + (arcs.size() + 1)});
 
+    System.out.println("tL: " + transitionLabel + " pL: " + placeLabel);
+    
+    if (startObj.equals("T")) { // arc originates from transition and is going into a place
+
+     // change to be based on labels for adding 
+     System.out.println("startObj: " + startObj);
+
+      for (int i=0; i<transitions.size(); i++) {
+        if (transitions.get(i).getLabel().equals(transitionLabel)) {
+          System.out.println("Transition with label: " + transitionLabel + " found");
+          transitions.get(i).addOutgoingArc(arcToAdd.getID());
+          arcToAdd.setOrigin(transitions.get(i).getID());
+          
+        }
+      }
+      for (int i=0; i<places.size(); i++) {
+        if (places.get(i).getLabel().equals(placeLabel)) {
+          System.out.println("Place with label: " + placeLabel + " found");
+          places.get(i).addIncomingArc(arcToAdd.getID());
+          arcToAdd.setEndpoint(places.get(i).getID());
+          
+        }
+      }
       arcs.add(arcToAdd);
       
     } else {
+     System.out.println("startObj: " + startObj);
+      
+      for (int i=0; i<transitions.size(); i++) {
+        if (transitions.get(i).getLabel().equals(transitionLabel)) {
+          System.out.println("Transition with label: " + transitionLabel + " found");
+          transitions.get(i).addIncomingArc(arcToAdd.getID());
+          arcToAdd.setEndpoint(transitions.get(i).getID());
+          
+        }
+      }
+      for (int i=0; i<places.size(); i++) {
+        if (places.get(i).getLabel().equals(placeLabel)) {
+          System.out.println("Place with label: " + placeLabel + " found");
+          places.get(i).addOutgoingArc(arcToAdd.getID());
+          arcToAdd.setOrigin(places.get(i).getID());
+          
+        }
+      }
+
+/*
       places.get(placeIndex).addOutgoingArc(arcToAdd.getID());
       arcToAdd.setOrigin(places.get(placeIndex).getID());
       transitions.get(transitionIndex).addIncomingArc(arcToAdd.getID());
       arcToAdd.setEndpoint(transitions.get(transitionIndex).getID());
-
+*/
       arcs.add(arcToAdd);
       
     }
@@ -217,16 +339,10 @@ public class PetriNetSimulator {
 
   public static void addNewTransition(ArrayList<Transition> transitions, DiagramCanvas canvas) {
     Transition transitionToAdd = new Transition(new String[] {"Transition " + (transitions.size() + 1)}, canvas); // pass in a default label for the new transition 
-    //transitionToAdd.addActionListener(e -> transitionClicked(e));
     transitions.add(transitionToAdd);
     canvas.setTransitions(transitions);
     canvas.repaint();
   }
-
-  public void transitionClicked(ActionEvent e) {
-    System.out.println("Transiotn clicked");
-  }
-
 
   public static void removeTransition(String transID, ArrayList<Transition> transitions, ArrayList<Place> places, ArrayList<Arc> arcs) {
     // find transition with transition ID, then go through list of incoming and outgoing arcs and delete all of those arcs, finally, delete transition itself
@@ -380,52 +496,84 @@ public class PetriNetSimulator {
   // new file 
 
 
+  public static boolean doesArcExist(ArrayList<Arc> arcs, String arcLabel) {
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getLabel().equals(arcLabel)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean doesPlaceExist(ArrayList<Place> places, String placeLabel) {
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getLabel().equals(placeLabel)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean doesTransitionExist(ArrayList<Transition> transitions, String transitionLabel) {
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getLabel().equals(transitionLabel)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   
+  public static void setTokensInPlace(int tokens, ArrayList<Place> places, String placeLabel) {
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getLabel().equals(placeLabel)) {
+        places.get(i).setTokens(tokens);
+        return;
+      }
+    }
+  }
+
+
   public static void addTokensToPlace(int tokensToAdd, ArrayList<Place> places, String placeID) {
     for (int i=0; i<places.size(); i++) {
-      if (places.get(i).getID() == placeID) {
+      if (places.get(i).getID().equals(placeID)) {
         places.get(i).addTokens(tokensToAdd);
-        break;
+        return;
       }
     }
   }
 
 
-  public static void changeArcWeight(int newWeight, ArrayList<Arc> arcs, String arcID) {
+  public static void setArcWeight(int newWeight, ArrayList<Arc> arcs, String arcLabel) {
     for (int i=0; i<arcs.size(); i++) {
-      if (arcs.get(i).getID() == arcID) {
+      if (arcs.get(i).getLabel().equals(arcLabel)) {
         arcs.get(i).setWeight(newWeight);
-        break;
+        return;
       }
     }
   }
 
-  public static void changeArcLabel(String newLabel, ArrayList<Arc> arcs, String arcID) {
-    for (int i=0; i<arcs.size(); i++) {
-      if (arcs.get(i).getID() == arcID) {
-        arcs.get(i).setLabel(newLabel);
-        break;
-      }
-    }
-  }
-
-  public static void changePlaceLabel(String newLabel, ArrayList<Place> places, String origLabel) {
+  public static void changeLabel(String origLabel, String newLabel, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
     for (int i=0; i<places.size(); i++) {
       if (places.get(i).getLabel().equals(origLabel)) {
         places.get(i).setLabel(newLabel);
-        break;
+        return;
+      }
+    }
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getLabel().equals(origLabel)) {
+        transitions.get(i).setLabel(newLabel);
+        return;
+      }
+    }
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getLabel().equals(origLabel)) {
+        arcs.get(i).setLabel(newLabel);
+        return;
       }
     }
   }
 
-  public static void changeTransitionLabel(String newLabel, ArrayList<Transition> transitions, String transitionID) {
-    for (int i=0; i<transitions.size(); i++) {
-      if (transitions.get(i).getID() == transitionID) {
-        transitions.get(i).setLabel(newLabel);
-        break;
-      }
-    }
-  }
 
 
   // rendering

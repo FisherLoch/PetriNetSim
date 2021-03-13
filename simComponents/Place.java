@@ -62,6 +62,10 @@ public class Place {
     return tokens;
   }
 
+  public void setTokens(int t) {
+    tokens = t;
+  }
+
   public ArrayList<String> getIncomingArcsList() {
     return incomingArcs;
   }
