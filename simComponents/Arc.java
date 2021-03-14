@@ -77,6 +77,7 @@ public class Arc {
     double angle = Math.acos((Math.pow(sideX, 2) + Math.pow(sideY, 2) - Math.pow(sideZ, 2))/(2 * sideX * sideY));
    
     if (originX >= endpointX) { // triangle faces left
+      endpointX = endpointX + 20;
       // leave angle as it is
     } else { // triangle faces right
       angle = 2*Math.PI - angle;
@@ -92,8 +93,13 @@ public class Arc {
 
     int endXOffset = (int) Math.round(-radius * Math.sin(angle));
     int endYOffset = (int) Math.round(-radius * Math.cos(angle));
+    int origY = originY + endYOffset;
+    int origX = originX + endXOffset;
 
-    g2.drawLine(endXOffset + originX, endYOffset + originY, endpointX, endpointY);
+    g2.drawLine(origX, origY, endpointX, endpointY);
+
+
+
 
     int midX = Math.round((originX + endXOffset + endpointX)/2);
     int midY = Math.round((originY + endYOffset + endpointY)/2);
@@ -101,19 +107,66 @@ public class Arc {
     g2.drawString(label, midX, midY - 20);
     g2.drawString(Integer.toString(weight), midX, midY + 20);
 
+    double arrowAngleLeft = angle - Math.PI/6 + Math.PI;
+    double arrowAngleRight = angle + Math.PI/6 + Math.PI;
+
+    int leftHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleLeft));
+    int leftHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleLeft));
+
+    int rightHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleRight));
+    int rightHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleRight));
+
+    g2.drawLine(endpointX, endpointY, endpointX + rightHeadEndpointX, endpointY + rightHeadEndpointY);
+    g2.drawLine(endpointX, endpointY, endpointX + leftHeadEndpointX, endpointY + leftHeadEndpointY);
+
+
+
   }
 // for both renders, add arrowhead
 
   public void renderTransition(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
-
     g.setColor(Color.BLACK);
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(3));
+    double sideX = originY;
+    double sideY = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY - originY, 2));
+    double sideZ = Math.sqrt(Math.pow(endpointY, 2) + Math.pow(originX - endpointX, 2));
+    if ((originY - endpointY) > 0) {
+      sideZ = Math.sqrt(Math.pow(originY - endpointY, 2) + Math.pow(originX - endpointX, 2));
+    }
+    double angle = Math.acos((Math.pow(sideX, 2) + Math.pow(sideY, 2) - Math.pow(sideZ, 2))/(2 * sideX * sideY));
+    if (originX >= endpointX) { // triangle faces left
+    } else { // triangle faces right
+      angle = 2*Math.PI - angle;
+    }
+    int endXOffset = (int) Math.round(-radius * Math.sin(angle));
+    int endYOffset = (int) Math.round(-radius * Math.cos(angle));
+    int endY = endpointY + endYOffset;
+    int endX = endpointX - endXOffset;
+
+    g2.drawLine(originX, originY, endpointX - endXOffset, endpointY + endYOffset);
 
 
-    // get angle and offset endpoint to edge of radius
-    
-    g2.drawLine(originX, originY, endpointX, endpointY);
+    double arrowAngleLeft = angle - Math.PI/6 + Math.PI;
+    double arrowAngleRight = angle + Math.PI/6 + Math.PI;
+
+    int leftHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleLeft));
+    int leftHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleLeft));
+
+    int rightHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleRight));
+    int rightHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleRight));
+
+    g2.drawLine(endX, endY, endX + rightHeadEndpointX, endY + rightHeadEndpointY);
+    g2.drawLine(endX, endY, endX + leftHeadEndpointX, endY + leftHeadEndpointY);
+
+
+    int midX = Math.round((originX + endXOffset + endpointX)/2);
+    int midY = Math.round((originY + endYOffset + endpointY)/2);
+
+    g2.drawString(label, midX, midY - 20);
+    g2.drawString(Integer.toString(weight), midX, midY + 20);
+
+
   }
 
 }
