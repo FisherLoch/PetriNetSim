@@ -62,15 +62,17 @@ public class PetriNetSimulator {
     // File
     JMenu mbFile = new JMenu("FILE");
     JMenuItem save = new JMenuItem("Save");
-    JMenuItem saveAs = new JMenuItem("Save as");
+    //JMenuItem saveAs = new JMenuItem("Save as");
     JMenuItem open = new JMenuItem("Open");
     JMenuItem newFile = new JMenuItem("New");
     mbFile.add(newFile);
     mbFile.add(open);
     mbFile.add(save);
-    mbFile.add(saveAs);
+    //mbFile.add(saveAs);
 
-    // ** need action listeners for these
+    open.addActionListener(e -> callFileMenu(places, transitions, arcs, "Open petri net", "Open", simulator, canvas));
+    save.addActionListener(e -> callFileMenu(places, transitions, arcs, "Save petri net", "Save", simulator, canvas));
+    newFile.addActionListener(e -> newPetriNet(places, transitions, arcs, canvas, simulator));
 
     // Add
     JMenu mbAdd = new JMenu("ADD");
@@ -116,27 +118,62 @@ public class PetriNetSimulator {
     
   }
 
-  public static void callErrorBox(String eMsg) {
-    JFrame eBox = new JFrame("Error");
-    eBox.setLayout(null);
-    JButton close = new JButton("Close");
-    JLabel errMessage = new JLabel(eMsg);
 
-    eBox.add(close);
-    eBox.add(errMessage);
-    eBox.setSize(300, 300);
+  public static void callFileMenu(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String title, String buttonText, JFrame sim, DiagramCanvas canvas) {
+    
+    JFrame saveMenu = new JFrame(title);
+    saveMenu.setLayout(null);
+    JButton close = new JButton(buttonText);
+    JTextField file = new JTextField(30);
+    JLabel fileLabel = new JLabel("File name:");
 
-    close.setSize(100, 50);
-    close.setLocation(100, 120);
-    errMessage.setSize(200, 50);
-    errMessage.setLocation(50, 70);
-    eBox.setVisible(true);
+    saveMenu.add(close);
+    saveMenu.add(file);
+    saveMenu.add(fileLabel);
+    saveMenu.setSize(500, 400);
+
+    fileLabel.setSize(100, 50);
+    fileLabel.setLocation(50, 100);
+
+    file.setSize(250, 50);
+    file.setLocation(150, 100);
+
+    close.setSize(200, 50);
+    close.setLocation(150, 200);
+
+    saveMenu.setVisible(true);
+    saveMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     close.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        eBox.dispose();
+
+        // check for valid file name here
+
+        if (title.equals("Save petri net")) {
+          saveFile(places, transitions, arcs, file.getText());
+        } else if (title.equals("Open petri net")) {
+          openFile(places, transitions, arcs, file.getText(), sim, canvas);
+        }
+
+        saveMenu.dispose();
+
       }
+
     });
-    eBox.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+  }
+
+
+  public static void saveFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName) {
+    // save in location ./fileName
+    System.out.println("Save file: " + fileName);
+
+  }
+
+  public static void openFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName, JFrame sim, DiagramCanvas canvas) {
+    System.out.println("Open file: " + fileName);
+
   }
 
   public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
@@ -244,6 +281,29 @@ public class PetriNetSimulator {
     popupMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
+  }
+
+  public static void callErrorBox(String eMsg) {
+    JFrame eBox = new JFrame("Error");
+    eBox.setLayout(null);
+    JButton close = new JButton("Close");
+    JLabel errMessage = new JLabel(eMsg);
+
+    eBox.add(close);
+    eBox.add(errMessage);
+    eBox.setSize(300, 300);
+
+    close.setSize(100, 50);
+    close.setLocation(100, 120);
+    errMessage.setSize(200, 50);
+    errMessage.setLocation(50, 70);
+    eBox.setVisible(true);
+    close.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        eBox.dispose();
+      }
+    });
+    eBox.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   }
 
   public static boolean isNumeric(String s) {
@@ -410,6 +470,30 @@ public class PetriNetSimulator {
         break; // if found before last element, exit for loop to save time
       }
     }  
+  }
+
+  public static void newPetriNet(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+    // reset all of places, transitions and arcs, repaint and it should be fine?
+    // need to reset arrays in diagram canvas as well
+
+
+    // maybe have a popup box to confirm?
+    // can also save the file before making a new one in case it needs to be recovered?
+
+    for (int i=(places.size() - 1); i>=0; i--) {
+      places.remove(i);
+    }
+    for (int i=(transitions.size() - 1); i>=0; i--) {
+      transitions.remove(i);
+    }
+    for (int i=(arcs.size() - 1); i>=0; i--) {
+      arcs.remove(i);
+    }
+    canvas.setPlaces(places);
+    canvas.setTransitions(transitions);
+    canvas.setArcs(arcs);
+    sim.repaint();
+
   }
 
 
