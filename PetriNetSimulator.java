@@ -4,6 +4,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import simComponents.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.util.Scanner;
+
 
 public class PetriNetSimulator {
   public static void main(String[] args) {
@@ -150,7 +156,7 @@ public class PetriNetSimulator {
         // check for valid file name here
 
         if (title.equals("Save petri net")) {
-          saveFile(places, transitions, arcs, file.getText());
+          saveFile(places, transitions, arcs, file.getText(), 0);
         } else if (title.equals("Open petri net")) {
           openFile(places, transitions, arcs, file.getText(), sim, canvas);
         }
@@ -165,10 +171,123 @@ public class PetriNetSimulator {
   }
 
 
-  public static void saveFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName) {
+  public static void saveFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName, int depth) {
     // save in location ./fileName
     System.out.println("Save file: " + fileName);
 
+    if (createFile(fileName)) {
+      // new file created, write data to it
+      try {
+        FileWriter writer = new FileWriter(fileName);
+        String writeData;
+        Place p;
+        ArrayList<String> list1;
+        ArrayList<String> list2;
+
+        // save place data
+        for (int i=0; i<places.size(); i++) {
+          writer.write("New place\n");
+          p = places.get(i);
+          writer.write(p.getID() + "\n");
+          writeData = "";
+          writeData = writeData + p.getLabel() + "-" + p.getTokens() + "-" + p.getX() + "-" + p.getY() + "\n";
+          writer.write(writeData);
+          list1 = p.getIncomingArcsList();
+          list2 = p.getOutgoingArcsList();
+          writer.write("incArcs\n");
+          for (int j=0; j<list1.size(); j++) {
+            writer.write(list1.get(j) + "\n");
+          }
+          writer.write("outArcs\n");
+          for (int j=0; j<list2.size(); j++) {
+            writer.write(list2.get(j) + "\n");
+          }
+        } 
+    
+        Transition t;
+        // save transition data
+        for (int i=0; i<transitions.size(); i++) {
+          writer.write("New transition\n");
+          t = transitions.get(i);
+          writer.write(t.getID() + "\n");
+          writeData = "";
+          writeData = writeData + t.getLabel() + "-" + t.getX() + "-" + t.getY() + "\n";
+          writer.write(writeData);
+          list1 = t.getIncomingArcsList();
+          list2 = t.getOutgoingArcsList();
+          writer.write("incArcs\n");
+          for (int j=0; j<list1.size(); j++) {
+            writer.write(list1.get(j) + "\n");
+          }
+          writer.write("outArcs\n");
+          for (int j=0; j<list2.size(); j++) {
+            writer.write(list2.get(j) + "\n");
+          }
+        } 
+
+
+        // save arc data
+        Arc a;
+
+        for (int i=0; i<arcs.size(); i++) {
+          writer.write("New arc\n");
+          a = arcs.get(i);
+          writer.write(a.getID() + "\n");
+          writeData = "";
+          writeData = writeData + a.getLabel() + "-" + a.getWeight() + "\n" + a.getOrigin() + "\n" + a.getEndpoint() + "\n";
+          writer.write(writeData);
+        } 
+
+
+
+
+        writer.close();
+        System.out.println("Writing to file finished");
+
+      } catch (IOException e) {
+        System.out.println("Error writing file");
+      }
+
+      
+    } else {
+      // file already exists, or not created
+      // check if exists, will need to remove the data and rewrite it
+      if (depth < 3) {
+        File delFile = new File(fileName);
+        if (delFile.delete()) {
+          saveFile(places, transitions, arcs, fileName, depth + 1);
+        } else {
+          System.out.println("File could not be deleted");
+        } 
+      } else {
+        //err msg saying file could not be saved
+        System.out.println("Depth 3 reached in save file");
+      }
+    }
+
+
+
+
+
+
+
+  }
+
+  public static boolean createFile(String fileName) { 
+    try {
+      File newFile = new File(fileName);
+      if (newFile.createNewFile()) {
+        return true;
+      } else {
+        // error box
+        // decide whether to overwrite?
+        //callErrorBox("File name already exists");
+        return false;
+      }
+    } catch (IOException e) {
+      System.out.println("Error occurred in createFile");
+      return false;
+    }
   }
 
   public static void openFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName, JFrame sim, DiagramCanvas canvas) {

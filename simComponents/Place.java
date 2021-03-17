@@ -16,14 +16,24 @@ public class Place {
   volatile int centreY;
   int radius = 50;
 
-  // properties array format: [label]
+  // properties array format: [String label], String ID, int tokens, int centreX, int centreY, ArrayList<String> outArcs, ArrayList<String> incArcs
   public Place(String[] properties) { // constructor
     ID = "Place" + UUID.randomUUID().toString();
     label = properties[0];
-    tokens = Integer.parseInt(properties[0].replaceAll("\\D+", ""));
-
+    //tokens = Integer.parseInt(properties[0].replaceAll("\\D+", ""));
     centreX = (int) (Math.random() * 400);
     centreY = (int) (Math.random() * 400);
+      
+  }
+
+  public Place(String[] properties, String placeID, int t, int cX, int cY, ArrayList<String> outArcs, ArrayList<String> incArcs) {
+    ID = placeID;
+    outgoingArcs = outArcs;
+    incomingArcs = incArcs;
+    tokens = t;
+    label = properties[0];
+    centreX = cX;
+    centreY = cY;
   }
 
   public String getID() {
