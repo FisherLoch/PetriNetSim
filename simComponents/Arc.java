@@ -17,6 +17,14 @@ public class Arc {
     label = initValues[0];
   }
 
+  public Arc(String i, String l, String o, String e, int w) {
+    ID = i;
+    label = l;
+    origin = o;
+    endpoint = e;
+    weight = w;
+  }
+
   public String getID() {
     return ID;
   }

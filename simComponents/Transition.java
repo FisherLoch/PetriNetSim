@@ -21,7 +21,6 @@ public class Transition {
   volatile int mouseX = 0;
   volatile int mouseY = 0;
 
-
   DiagramCanvas canvas;
 
 
@@ -33,9 +32,16 @@ public class Transition {
     originX = (int) (Math.random() * 500);
     originY = (int) (Math.random() * 500);   
 
-
     canvas = c;
 
+  }
+
+  public Transition(String l, String i, int x, int y, DiagramCanvas c) {
+    ID = i;
+    label = l;
+    originX = x;
+    originY = y;
+    canvas = c;
   }
 
   public String getID() {

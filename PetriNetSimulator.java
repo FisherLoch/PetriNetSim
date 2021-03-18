@@ -293,6 +293,103 @@ public class PetriNetSimulator {
   public static void openFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName, JFrame sim, DiagramCanvas canvas) {
     System.out.println("Open file: " + fileName);
 
+    try {
+
+      File f = new File(fileName);
+      Scanner fileReader = new Scanner(f);
+
+      while (fileReader.hasNextLine()) {
+        String data = fileReader.nextLine();
+        if (data.equals("New place")) {
+          String placeID = fileReader.nextLine();
+          String[] placeData = fileReader.nextLine().split("-");
+          System.out.println("should be incArcs: " + fileReader.nextLine()); // need to keep this next line part in some way to allow while loop to work as intended
+          ArrayList<String> incArcs = new ArrayList<String>();
+          String incArc = fileReader.nextLine();
+          System.out.println("comparing " + incArc + " with outArcs");
+          while (!incArc.equals("outArcs")) {
+            incArcs.add(incArc);
+            incArc = fileReader.nextLine();
+          } // after this, current line should be outArcs
+          System.out.println("Current line should be outarcs");
+
+          ArrayList<String> outArcs = new ArrayList<String>();
+          String outArc = fileReader.nextLine();
+          while (!outArc.substring(0, 3).equals("New")) {
+            outArcs.add(outArc);
+            outArc = fileReader.nextLine();
+            //System.out.println("Checking for equals New: " + outArc.substring(0, 2));
+          }
+
+          System.out.println("Should be at new transition or place");
+          // after this, either met new transition, or new place
+
+          int tokens = Integer.parseInt(placeData[1]);
+          int centreX = Integer.parseInt(placeData[2]);
+          int centreY = Integer.parseInt(placeData[3]);
+          Place p = new Place(placeData[0], placeID, tokens, centreX, centreY, outArcs, incArcs);
+          places.add(p);
+          // exit if here, next line should be "New place" or "New transition"
+        } else if (data.equals("New transition")) {
+
+          String transID = fileReader.nextLine();
+          String[] transData = fileReader.nextLine().split("-");
+
+          System.out.println("Should be incArcs: " + fileReader.nextLine());
+          ArrayList<String> incArcs = new ArrayList<String>();
+          String incArc = fileReader.nextLine();
+          while (!incArc.equals("outArcs")) {
+            incArcs.add(incArc);
+            incArc = fileReader.nextLine();
+          }
+
+          ArrayList<String> outArcs = new ArrayList<String>();
+          String outArc = fileReader.nextLine();
+          while (!outArc.substring(0, 3).equals("New")) {
+            outArcs.add(outArc);
+            outArc = fileReader.nextLine();
+          }
+
+          int originX = Integer.parseInt(transData[1]);
+          int originY = Integer.parseInt(transData[2]);
+          Transition t = new Transition(transData[0], transID, originX, originY, canvas);
+          transitions.add(t);
+
+          // exit if here, next line should be "New transition" or "New arc"
+
+
+        } else if (data.equals("New arc")) {
+          String arcID = fileReader.nextLine();
+          String[] arcData = fileReader.nextLine().split("-");
+          String origin = fileReader.nextLine();
+          String endpoint = fileReader.nextLine();
+          int weight = Integer.parseInt(arcData[1]);
+          Arc a = new Arc(arcID, arcData[0], origin, endpoint, weight);
+
+          arcs.add(a);
+
+        } else {
+          System.out.println("Unknown line: " + data + " encountered");
+        }
+
+    
+
+      }
+
+      fileReader.close();
+      // all data stored in arrays, add to canvas data, repaint sim, check that arrays have data
+
+
+      canvas.setPlaces(places);
+      canvas.setTransitions(transitions);
+      canvas.setArcs(arcs);
+      sim.repaint();
+
+
+    } catch (FileNotFoundException e) {
+      System.out.println("File not found");
+    }
+      
   }
 
   public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {

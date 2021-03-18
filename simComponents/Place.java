@@ -26,12 +26,12 @@ public class Place {
       
   }
 
-  public Place(String[] properties, String placeID, int t, int cX, int cY, ArrayList<String> outArcs, ArrayList<String> incArcs) {
+  public Place(String l, String placeID, int t, int cX, int cY, ArrayList<String> outArcs, ArrayList<String> incArcs) {
     ID = placeID;
     outgoingArcs = outArcs;
     incomingArcs = incArcs;
     tokens = t;
-    label = properties[0];
+    label = l;
     centreX = cX;
     centreY = cY;
   }
