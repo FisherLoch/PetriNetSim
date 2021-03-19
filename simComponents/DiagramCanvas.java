@@ -20,8 +20,8 @@ public class DiagramCanvas extends JPanel {
 
   public DiagramCanvas(JFrame s) {
     setBackground(Color.WHITE);
-    setSize(500, 500);
-    setBounds(0, 0, 500, 500);
+    setSize(2000, 1500);
+    setBounds(0, 0, 2000, 1500);
     setOpaque(true);
     sim = s;
  

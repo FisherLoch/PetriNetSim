@@ -10,6 +10,10 @@ public class Arc {
   String endpoint;
   String label;
   
+  public void printData() {
+    System.out.println(ID + ": weight: " + weight + "\n Origin: " + origin + "\n Endpoint: " + endpoint);
+    System.out.println("");
+  }
 
   // [label, weight]
   public Arc(String[] initValues) { // constructor

@@ -16,6 +16,19 @@ public class Place {
   volatile int centreY;
   int radius = 50;
 
+
+  public void printData() {
+    System.out.println(ID + ": tokens: " + tokens + ", cX: " + centreX + ", cY: " + centreY);
+    System.out.println("Arcs:");
+    for (int i=0; i<outgoingArcs.size(); i++) {
+      System.out.println(outgoingArcs.get(i));
+    }
+    for (int i=0; i<incomingArcs.size(); i++) {
+      System.out.println(incomingArcs.get(i));
+    }
+    System.out.println("");
+  }
+
   // properties array format: [String label], String ID, int tokens, int centreX, int centreY, ArrayList<String> outArcs, ArrayList<String> incArcs
   public Place(String[] properties) { // constructor
     ID = "Place" + UUID.randomUUID().toString();

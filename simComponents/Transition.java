@@ -24,6 +24,18 @@ public class Transition {
   DiagramCanvas canvas;
 
 
+  public void printData() {
+    System.out.println(ID + ": oX: " + originX + ", oY: " + originY);
+    System.out.println("Arcs:");
+    for (int i=0; i<outgoingArcs.size(); i++) {
+      System.out.println(outgoingArcs.get(i));
+    }
+    for (int i=0; i<incomingArcs.size(); i++) {
+      System.out.println(incomingArcs.get(i));
+    }
+    System.out.println("");
+  }
+
   // properties array format: [label]
   public Transition(String[] properties, DiagramCanvas c) { // constructor
     ID = "Trans" + UUID.randomUUID().toString();

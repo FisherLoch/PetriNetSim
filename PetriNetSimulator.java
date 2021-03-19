@@ -50,7 +50,7 @@ public class PetriNetSimulator {
     simulator.setLayout(null);
 
     simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically
-    simulator.setSize(1000, 1000);
+    simulator.setSize(2000, 1500);
     JMenuBar menuBar = new JMenuBar();
     // Debugging
     JMenu mbDebug = new JMenu("DEBUG");
@@ -292,36 +292,36 @@ public class PetriNetSimulator {
 
   public static void openFile(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String fileName, JFrame sim, DiagramCanvas canvas) {
     System.out.println("Open file: " + fileName);
+    newPetriNet(places, transitions, arcs, canvas, sim);
 
     try {
 
       File f = new File(fileName);
       Scanner fileReader = new Scanner(f);
+      String data = fileReader.nextLine();
+      int c = 0;
 
       while (fileReader.hasNextLine()) {
-        String data = fileReader.nextLine();
+        System.out.println("Start of if, data = " + data);
         if (data.equals("New place")) {
           String placeID = fileReader.nextLine();
           String[] placeData = fileReader.nextLine().split("-");
           System.out.println("should be incArcs: " + fileReader.nextLine()); // need to keep this next line part in some way to allow while loop to work as intended
           ArrayList<String> incArcs = new ArrayList<String>();
-          String incArc = fileReader.nextLine();
-          System.out.println("comparing " + incArc + " with outArcs");
-          while (!incArc.equals("outArcs")) {
-            incArcs.add(incArc);
-            incArc = fileReader.nextLine();
+          data = fileReader.nextLine();
+          while (!data.equals("outArcs")) {
+            incArcs.add(data);
+            data = fileReader.nextLine();
           } // after this, current line should be outArcs
-          System.out.println("Current line should be outarcs");
 
           ArrayList<String> outArcs = new ArrayList<String>();
-          String outArc = fileReader.nextLine();
-          while (!outArc.substring(0, 3).equals("New")) {
-            outArcs.add(outArc);
-            outArc = fileReader.nextLine();
+          data = fileReader.nextLine();
+          while (!data.substring(0, 3).equals("New")) {
+            outArcs.add(data);
+            data = fileReader.nextLine();
             //System.out.println("Checking for equals New: " + outArc.substring(0, 2));
           }
 
-          System.out.println("Should be at new transition or place");
           // after this, either met new transition, or new place
 
           int tokens = Integer.parseInt(placeData[1]);
@@ -330,24 +330,26 @@ public class PetriNetSimulator {
           Place p = new Place(placeData[0], placeID, tokens, centreX, centreY, outArcs, incArcs);
           places.add(p);
           // exit if here, next line should be "New place" or "New transition"
+
         } else if (data.equals("New transition")) {
 
           String transID = fileReader.nextLine();
           String[] transData = fileReader.nextLine().split("-");
 
-          System.out.println("Should be incArcs: " + fileReader.nextLine());
           ArrayList<String> incArcs = new ArrayList<String>();
-          String incArc = fileReader.nextLine();
-          while (!incArc.equals("outArcs")) {
-            incArcs.add(incArc);
-            incArc = fileReader.nextLine();
+          data = fileReader.nextLine();
+          System.out.println("Data inc: " + data);
+          while (!data.equals("outArcs")) {
+            incArcs.add(data);
+            data = fileReader.nextLine();
           }
 
           ArrayList<String> outArcs = new ArrayList<String>();
-          String outArc = fileReader.nextLine();
-          while (!outArc.substring(0, 3).equals("New")) {
-            outArcs.add(outArc);
-            outArc = fileReader.nextLine();
+          data = fileReader.nextLine();
+          System.out.println("Data out: " + data);
+          while (!data.substring(0, 3).equals("New")) {
+            outArcs.add(data);
+            data = fileReader.nextLine();
           }
 
           int originX = Integer.parseInt(transData[1]);
@@ -359,6 +361,7 @@ public class PetriNetSimulator {
 
 
         } else if (data.equals("New arc")) {
+          System.out.println("At arcs");
           String arcID = fileReader.nextLine();
           String[] arcData = fileReader.nextLine().split("-");
           String origin = fileReader.nextLine();
@@ -367,6 +370,10 @@ public class PetriNetSimulator {
           Arc a = new Arc(arcID, arcData[0], origin, endpoint, weight);
 
           arcs.add(a);
+
+          if (fileReader.hasNextLine()) {
+            System.out.println("Data = " + fileReader.nextLine());
+          }
 
         } else {
           System.out.println("Unknown line: " + data + " encountered");
@@ -379,10 +386,23 @@ public class PetriNetSimulator {
       fileReader.close();
       // all data stored in arrays, add to canvas data, repaint sim, check that arrays have data
 
+      for (int i=0; i<places.size(); i++) {
+        // print place data
+        places.get(i).printData();
+      }
+
+      for (int i=0; i<transitions.size(); i++) {
+        transitions.get(i).printData();
+      }
+
+      for (int i=0; i<arcs.size(); i++) {
+        arcs.get(i).printData();
+      }
 
       canvas.setPlaces(places);
       canvas.setTransitions(transitions);
       canvas.setArcs(arcs);
+      canvas.repaint();
       sim.repaint();
 
 
