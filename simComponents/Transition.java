@@ -48,11 +48,13 @@ public class Transition {
 
   }
 
-  public Transition(String l, String i, int x, int y, DiagramCanvas c) {
+  public Transition(String l, String i, int x, int y, ArrayList<String> incArcs, ArrayList<String> outArcs, DiagramCanvas c) {
     ID = i;
     label = l;
     originX = x;
     originY = y;
+    incomingArcs = incArcs;
+    outgoingArcs = outArcs;
     canvas = c;
   }
 

@@ -192,6 +192,7 @@ public class PetriNetSimulator {
           writeData = "";
           writeData = writeData + p.getLabel() + "-" + p.getTokens() + "-" + p.getX() + "-" + p.getY() + "\n";
           writer.write(writeData);
+          
           list1 = p.getIncomingArcsList();
           list2 = p.getOutgoingArcsList();
           writer.write("incArcs\n");
@@ -202,6 +203,7 @@ public class PetriNetSimulator {
           for (int j=0; j<list2.size(); j++) {
             writer.write(list2.get(j) + "\n");
           }
+          
         } 
     
         Transition t;
@@ -213,6 +215,7 @@ public class PetriNetSimulator {
           writeData = "";
           writeData = writeData + t.getLabel() + "-" + t.getX() + "-" + t.getY() + "\n";
           writer.write(writeData);
+          
           list1 = t.getIncomingArcsList();
           list2 = t.getOutgoingArcsList();
           writer.write("incArcs\n");
@@ -223,6 +226,7 @@ public class PetriNetSimulator {
           for (int j=0; j<list2.size(); j++) {
             writer.write(list2.get(j) + "\n");
           }
+          
         } 
 
 
@@ -335,9 +339,10 @@ public class PetriNetSimulator {
 
           String transID = fileReader.nextLine();
           String[] transData = fileReader.nextLine().split("-");
-
+          
           ArrayList<String> incArcs = new ArrayList<String>();
           data = fileReader.nextLine();
+          
           System.out.println("Data inc: " + data);
           while (!data.equals("outArcs")) {
             incArcs.add(data);
@@ -351,10 +356,11 @@ public class PetriNetSimulator {
             outArcs.add(data);
             data = fileReader.nextLine();
           }
+          
 
           int originX = Integer.parseInt(transData[1]);
           int originY = Integer.parseInt(transData[2]);
-          Transition t = new Transition(transData[0], transID, originX, originY, canvas);
+          Transition t = new Transition(transData[0], transID, originX, originY, incArcs, outArcs, canvas);
           transitions.add(t);
 
           // exit if here, next line should be "New transition" or "New arc"

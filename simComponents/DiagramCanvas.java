@@ -120,7 +120,7 @@ public class DiagramCanvas extends JPanel {
 
   private PlaceData getPlaceData(String placeID) { 
     for (int i=0; i<placesRenderList.size(); i++) {
-      if (placesRenderList.get(i).getID() == placeID) {
+      if (placesRenderList.get(i).getID().equals(placeID)) {
         return new PlaceData(placesRenderList.get(i).getX(), placesRenderList.get(i).getY(), placesRenderList.get(i).getRadius());
       }
     }
@@ -129,7 +129,7 @@ public class DiagramCanvas extends JPanel {
 
   private TransitionData getTransitionData(String transID) {
     for (int i=0; i<transitionsRenderList.size(); i++) {
-      if (transitionsRenderList.get(i).getID() == transID) {
+      if (transitionsRenderList.get(i).getID().equals(transID)) {
         return new TransitionData(transitionsRenderList.get(i).getX(), transitionsRenderList.get(i).getY(), transitionsRenderList.get(i).getWidth(), transitionsRenderList.get(i).getHeight());
       }
     }
