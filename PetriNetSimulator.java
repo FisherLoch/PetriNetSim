@@ -105,11 +105,21 @@ public class PetriNetSimulator {
     changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places, transitions, arcs, canvas));
     setWeight.addActionListener(e -> callPopupMenu("Set new arc weight", simulator, "Arc Label:", "New weight:", places, transitions, arcs, canvas));
     setTokens.addActionListener(e -> callPopupMenu("Set new tokens in Place", simulator, "Place Label:", "New tokens:", places, transitions, arcs, canvas));
-    
+ 
+
+    // Simulate
+    JMenu mbSim = new JMenu("SIM");
+    JMenuItem fireTrans = new JMenuItem("Fire transition");
+
+    mbSim.add(fireTrans);
+
+    fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
+
 
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
     menuBar.add(mbEdit);
+    menuBar.add(mbSim);
 
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
@@ -556,6 +566,54 @@ public class PetriNetSimulator {
   }
 
 
+  public static void callPopupMenuSingleBox(String title, JFrame sim, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, String l1) {
+    JFrame popupMenu = new JFrame(title);
+    popupMenu.setLayout(null);
+    JTextField box1 = new JTextField(20);
+    JLabel label1 = new JLabel(l1);
+    JButton close = new JButton("Accept");
+
+    popupMenu.add(box1);
+    popupMenu.add(label1);
+    popupMenu.add(close);
+    
+
+    box1.setSize(200, 30);
+    box1.setLocation(200, 50);
+
+    label1.setSize(100, 30);
+    label1.setLocation(100, 50);
+
+    close.setSize(100, 20);
+    close.setLocation(200, 200);
+    
+    close.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        String box1Text = box1.getText();
+
+
+
+        if (title.equals("Fire transition")) {
+          if (!doesTransitionExist(transitions, box1Text)) {
+            callErrorBox("Label does not match any transition,\n or transition is not enabled");
+          } else if (!isTransitionEnabled(box1Text, places, transitions, arcs)) {
+            callErrorBox("Transition is not enabled");
+          } else {
+            fireTransition(places, transitions, arcs, box1Text, canvas);
+          }
+        }
+
+        popupMenu.dispose();
+        sim.repaint();
+      }
+    });
+
+    popupMenu.setSize(500, 300);
+    popupMenu.setVisible(true);
+    popupMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+  }
 
   
   public static void addNewArc(String startObj, String transitionLabel, String placeLabel, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {  
@@ -741,7 +799,15 @@ public class PetriNetSimulator {
 
   // will need to check for if multiple arcs come out of a single place and to add up the total weights before checking down the line (edge case)
 
-  public boolean isTransitionEnabled(Transition t, ArrayList<Arc> arcs, ArrayList<Place> places) {
+  public static boolean isTransitionEnabled(String transID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
+    Transition t = new Transition();
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getID().equals(transID)) {
+        t = transitions.get(i);
+        break;
+      }
+    }
+    
     ArrayList<String> arcsList = t.getIncomingArcsList();
     // check that for every incoming arc that the place it originates from has tokens >= the weight of the incoming arc
     if (arcsList.size() == 0) { // source transition
@@ -767,7 +833,7 @@ public class PetriNetSimulator {
     return true;
   }
 
-  public int getArcWeight(ArrayList<Arc> arcs, String arcID) {
+  public static int getArcWeight(ArrayList<Arc> arcs, String arcID) {
     for (int i=0; i<arcs.size(); i++) {
       if (arcs.get(i).getID() == arcID) {
         return arcs.get(i).getWeight();
@@ -781,8 +847,8 @@ public class PetriNetSimulator {
 
   // fire transition
 
-  public void fireTransition(ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places, String transitionID, DiagramCanvas canvas) {
-    Transition t = new Transition(new String[] {"Placeholder"}, canvas);
+  public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas) {
+    Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
       if (transitions.get(i).getID() == transitionID) {
         t = transitions.get(i);

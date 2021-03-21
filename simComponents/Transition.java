@@ -58,6 +58,10 @@ public class Transition {
     canvas = c;
   }
 
+  public Transition() {
+    // placeholder constructor for blank transition to initialise variable
+  }
+
   public String getID() {
     return ID;
   }
