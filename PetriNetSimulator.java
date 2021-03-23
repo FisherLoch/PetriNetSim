@@ -93,6 +93,11 @@ public class PetriNetSimulator {
     addPlace.addActionListener(e -> addNewPlace(places, canvas));
     addTransition.addActionListener(e -> addNewTransition(transitions, canvas));
 
+    
+    // Remove
+
+
+
     // Edit
     JMenu mbEdit = new JMenu("EDIT");
     JMenuItem changeLabel = new JMenuItem("Change label");
@@ -316,11 +321,12 @@ public class PetriNetSimulator {
       int c = 0;
 
       while (fileReader.hasNextLine()) {
-        System.out.println("Start of if, data = " + data);
+        //System.out.println("Start of if, data = " + data);
         if (data.equals("New place")) {
           String placeID = fileReader.nextLine();
           String[] placeData = fileReader.nextLine().split("-");
-          System.out.println("should be incArcs: " + fileReader.nextLine()); // need to keep this next line part in some way to allow while loop to work as intended
+          //System.out.println("should be incArcs: " + fileReader.nextLine()); // need to keep this next line part in some way to allow while loop to work as intended
+          fileReader.nextLine();
           ArrayList<String> incArcs = new ArrayList<String>();
           data = fileReader.nextLine();
           while (!data.equals("outArcs")) {
@@ -353,7 +359,7 @@ public class PetriNetSimulator {
           ArrayList<String> incArcs = new ArrayList<String>();
           data = fileReader.nextLine();
           
-          System.out.println("Data inc: " + data);
+          //System.out.println("Data inc: " + data);
           while (!data.equals("outArcs")) {
             incArcs.add(data);
             data = fileReader.nextLine();
@@ -361,7 +367,7 @@ public class PetriNetSimulator {
 
           ArrayList<String> outArcs = new ArrayList<String>();
           data = fileReader.nextLine();
-          System.out.println("Data out: " + data);
+          //System.out.println("Data out: " + data);
           while (!data.substring(0, 3).equals("New")) {
             outArcs.add(data);
             data = fileReader.nextLine();
@@ -377,7 +383,7 @@ public class PetriNetSimulator {
 
 
         } else if (data.equals("New arc")) {
-          System.out.println("At arcs");
+          //System.out.println("At arcs");
           String arcID = fileReader.nextLine();
           String[] arcData = fileReader.nextLine().split("-");
           String origin = fileReader.nextLine();
@@ -388,7 +394,8 @@ public class PetriNetSimulator {
           arcs.add(a);
 
           if (fileReader.hasNextLine()) {
-            System.out.println("Data = " + fileReader.nextLine());
+            //System.out.println("Data = " + fileReader.nextLine());
+            fileReader.nextLine();
           }
 
         } else {
@@ -401,7 +408,7 @@ public class PetriNetSimulator {
 
       fileReader.close();
       // all data stored in arrays, add to canvas data, repaint sim, check that arrays have data
-
+      /*
       for (int i=0; i<places.size(); i++) {
         // print place data
         places.get(i).printData();
@@ -414,7 +421,7 @@ public class PetriNetSimulator {
       for (int i=0; i<arcs.size(); i++) {
         arcs.get(i).printData();
       }
-
+*/
       canvas.setPlaces(places);
       canvas.setTransitions(transitions);
       canvas.setArcs(arcs);
@@ -599,7 +606,8 @@ public class PetriNetSimulator {
           } else if (!isTransitionEnabled(box1Text, places, transitions, arcs)) {
             callErrorBox("Transition is not enabled");
           } else {
-            fireTransition(places, transitions, arcs, box1Text, canvas);
+            String IDToPass = getTransIDFromLabel(box1Text, transitions);
+            fireTransition(places, transitions, arcs, IDToPass, canvas);
           }
         }
 
@@ -799,6 +807,17 @@ public class PetriNetSimulator {
 
   // will need to check for if multiple arcs come out of a single place and to add up the total weights before checking down the line (edge case)
 
+
+  public static String getTransIDFromLabel(String l, ArrayList<Transition> transitions) { // this might be a function elsewhere, if found, replace the call to this with that
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getLabel().equals(l)) {
+        return transitions.get(i).getID();
+      }
+    }
+    System.out.println("THIS LINE SHOULD NOT BE REACHED");
+    return "Not found";
+  }
+
   public static boolean isTransitionEnabled(String transID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
     Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
@@ -848,9 +867,12 @@ public class PetriNetSimulator {
   // fire transition
 
   public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas) {
+
+    System.out.println("In fire transition");
     Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
-      if (transitions.get(i).getID() == transitionID) {
+      if (transitions.get(i).getID().equals(transitionID)) {
+        System.out.println("Found transition");
         t = transitions.get(i);
         break;
       }
@@ -861,8 +883,16 @@ public class PetriNetSimulator {
 
 
     for (int i=0; i<incArcs.size(); i++) {
+      System.out.println("Inc arc: " + incArcs.get(i));
+    }
+    for (int i=0; i<outArcs.size(); i++) {
+      System.out.println("Out arc: " + outArcs.get(i));
+    }
+
+    for (int i=0; i<incArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
-        if (arcs.get(j).getID() == incArcs.get(i)) {
+        if (arcs.get(j).getID().equals(incArcs.get(i))) {
+          System.out.println("Remove " + arcs.get(j).getWeight() + " tokens from " + arcs.get(j).getOrigin());
           addTokensToPlace(-arcs.get(j).getWeight(), places, arcs.get(j).getOrigin()); // adding negative token value
           break;
         }
@@ -872,12 +902,17 @@ public class PetriNetSimulator {
 
     for (int i=0; i<outArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
-        if (arcs.get(j).getID() == outArcs.get(i)) {
+        if (arcs.get(j).getID().equals(outArcs.get(i))) {
+
+
           addTokensToPlace(arcs.get(j).getWeight(), places, arcs.get(j).getEndpoint());
           break;
         }
       }
     }
+
+
+    canvas.setPlaces(places);
 
 
 
