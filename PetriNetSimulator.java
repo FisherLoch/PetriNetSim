@@ -96,6 +96,20 @@ public class PetriNetSimulator {
     
     // Remove
 
+    JMenu mbRemove = new JMenu("REMOVE");
+    JMenuItem removeArc = new JMenuItem("Remove arc");
+    JMenuItem removePlace = new JMenuItem("Remove place");
+    JMenuItem removeTransition = new JMenuItem("Remove transition");
+
+    mbRemove.add(removeArc);
+    mbRemove.add(removePlace);
+    mbRemove.add(removeTransition);
+
+    removeArc.addActionListener(e -> callPopupMenuSingleBox("Remove arc", simulator, places, transitions, arcs, canvas, "Label:"));
+    removePlace.addActionListener(e -> callPopupMenuSingleBox("Remove place", simulator, places, transitions, arcs, canvas, "Label:"));
+    removeTransition.addActionListener(e -> callPopupMenuSingleBox("Remove transition", simulator, places, transitions, arcs, canvas, "Label:"));
+
+
 
 
     // Edit
@@ -123,19 +137,21 @@ public class PetriNetSimulator {
 
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
+    menuBar.add(mbRemove);
     menuBar.add(mbEdit);
     menuBar.add(mbSim);
 
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
-    
+
+   /* 
     addNewPlace(places, canvas);
     addNewPlace(places, canvas);
     addNewTransition(transitions, canvas);
     addNewTransition(transitions, canvas);
     //addNewArc("P", "Transition 1", "Place 1", places, transitions, arcs, canvas);
     simulator.repaint();
-    
+    */
     
   }
 
@@ -609,6 +625,27 @@ public class PetriNetSimulator {
             String IDToPass = getTransIDFromLabel(box1Text, transitions);
             fireTransition(places, transitions, arcs, IDToPass, canvas);
           }
+        } else if (title.equals("Remove arc")) {
+          if (!doesArcExist(arcs, box1Text)) {
+            callErrorBox("Label does not match any arc");
+          } else {
+            String IDToPass = getArcIDFromLabel(box1Text, arcs);
+            removeArc(IDToPass, places, transitions, arcs, canvas);
+          }
+        } else if (title.equals("Remove place")) {
+          if (!doesPlaceExist(places, box1Text)) {
+            callErrorBox("Label does not match any place");
+          } else {
+            String IDToPass = getPlaceIDFromLabel(box1Text, places);
+            removePlace(IDToPass, places, transitions, arcs, canvas);
+          } 
+        } else if (title.equals("Remove transition")) {
+          if (!doesTransitionExist(transitions, box1Text)) {
+            callErrorBox("Label does not match any transition");
+          } else {
+            String IDToPass = getTransIDFromLabel(box1Text, transitions);
+            removePlace(IDToPass, places, transitions, arcs, canvas);
+          }
         }
 
         popupMenu.dispose();
@@ -713,7 +750,7 @@ public class PetriNetSimulator {
     canvas.repaint();
   }
 
-  public static void removeTransition(String transID, ArrayList<Transition> transitions, ArrayList<Place> places, ArrayList<Arc> arcs) {
+  public static void removeTransition(String transID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
     // find transition with transition ID, then go through list of incoming and outgoing arcs and delete all of those arcs, finally, delete transition itself
     int transIndex = -1;
     for (int i=0; i<transitions.size(); i++) {
@@ -727,15 +764,18 @@ public class PetriNetSimulator {
     ArrayList<String> incomingArcsList = transitions.get(transIndex).getIncomingArcsList();
 
     for (int i=0; i<outgoingArcsList.size(); i++) {
-      removeArc(outgoingArcsList.get(i), arcs, transitions, places);
+      removeArc(outgoingArcsList.get(i), places, transitions, arcs, canvas);
     }
     for (int i=0; i<incomingArcsList.size(); i++) {
-      removeArc(incomingArcsList.get(i), arcs, transitions, places);
+      removeArc(incomingArcsList.get(i), places, transitions, arcs, canvas);
     }
     transitions.remove(transIndex);
+
+    canvas.setTransitions(transitions);
+    canvas.setArcs(arcs);
   }
 
-  public static void removePlace(String placeID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
+  public static void removePlace(String placeID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
     // same process as removing a transition
     int placeIndex = -1;
     for (int i=0; i<places.size(); i++) {
@@ -749,17 +789,20 @@ public class PetriNetSimulator {
     ArrayList<String> outgoingArcList = places.get(placeIndex).getOutgoingArcsList();
 
     for (int i=0; i<incomingArcList.size(); i++) {
-      removeArc(incomingArcList.get(i), arcs, transitions, places);
+      removeArc(incomingArcList.get(i), places, transitions, arcs, canvas);
     }
     for (int i=0; i<outgoingArcList.size(); i++) {
-      removeArc(outgoingArcList.get(i), arcs, transitions, places);
+      removeArc(outgoingArcList.get(i), places, transitions, arcs, canvas);
     }
     places.remove(placeIndex);
+
+    canvas.setPlaces(places);
+    canvas.setArcs(arcs);
     
   }
 
   // check for possible function to make this more efficient
-  public static void removeArc(String arcID, ArrayList<Arc> arcs, ArrayList<Transition> transitions, ArrayList<Place> places) {
+  public static void removeArc(String arcID, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
 
     // can possibly make these functions faster in general by returning when found and then breaking out of the loop, would require an extra couple of if statements though
  
@@ -778,6 +821,11 @@ public class PetriNetSimulator {
         break; // if found before last element, exit for loop to save time
       }
     }  
+
+    canvas.setTransitions(transitions);
+    canvas.setPlaces(places);
+    canvas.setArcs(arcs);
+
   }
 
   public static void newPetriNet(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
@@ -814,7 +862,27 @@ public class PetriNetSimulator {
         return transitions.get(i).getID();
       }
     }
-    System.out.println("THIS LINE SHOULD NOT BE REACHED");
+    System.out.println("getTransID THIS LINE SHOULD NOT BE REACHED");
+    return "Not found";
+  }
+
+  public static String getPlaceIDFromLabel(String l, ArrayList<Place> places) {
+    for (int i=0; i<places.size(); i++) {
+      if (places.get(i).getLabel().equals(l)) {
+        return places.get(i).getID();
+      }
+    }
+    System.out.println("getPlaceID THIS LINE SHOULD NOT BE REACHED");
+    return "Not found";
+  }
+
+  public static String getArcIDFromLabel(String l, ArrayList<Arc> arcs) {
+    for (int i=0; i<arcs.size(); i++) {
+      if (arcs.get(i).getLabel().equals(l)) {
+        return arcs.get(i).getID();
+      }
+    }
+    System.out.println("getArcID THIS LINE SHOULD NOT BE REACHED");
     return "Not found";
   }
 
