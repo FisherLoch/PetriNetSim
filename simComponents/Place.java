@@ -20,9 +20,11 @@ public class Place {
   public void printData() {
     System.out.println(ID + ": tokens: " + tokens + ", cX: " + centreX + ", cY: " + centreY);
     System.out.println("Arcs:");
+    System.out.println("Outgoing arcs:");
     for (int i=0; i<outgoingArcs.size(); i++) {
       System.out.println(outgoingArcs.get(i));
     }
+    System.out.println("Incoming arcs:");
     for (int i=0; i<incomingArcs.size(); i++) {
       System.out.println(incomingArcs.get(i));
     }
@@ -106,7 +108,7 @@ public class Place {
 
   public boolean containsOutgoingArc(String arcID) {
     for (int i=0; i<outgoingArcs.size(); i++) {
-      if (outgoingArcs.get(i) == arcID) {
+      if (outgoingArcs.get(i).equals(arcID)) {
         return true;
       }
     }
@@ -115,7 +117,7 @@ public class Place {
 
   public boolean containsIncomingArc(String arcID) {
     for (int i=0; i<incomingArcs.size(); i++) {
-      if (incomingArcs.get(i) == arcID) {
+      if (incomingArcs.get(i).equals(arcID)) {
         return true;
       }
     }
@@ -130,7 +132,7 @@ public class Place {
   //public void removeIncomingArc(int arcIndex) {
     //incomingArcs.remove(arcIndex);
     for (int i=0; i<incomingArcs.size(); i++) {
-      if (incomingArcs.get(i) == arcID) {
+      if (incomingArcs.get(i).equals(arcID)) {
         incomingArcs.remove(i);
         break;
       }
@@ -145,7 +147,7 @@ public class Place {
   //public void removeOutgoingArc(int arcIndex) {
     //outgoingArcs.remove(arcIndex);
     for (int i=0; i<outgoingArcs.size(); i++) {
-      if (outgoingArcs.get(i) == arcID) {
+      if (outgoingArcs.get(i).equals(arcID)) {
         outgoingArcs.remove(i);
         break;
       }

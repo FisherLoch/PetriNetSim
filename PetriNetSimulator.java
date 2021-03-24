@@ -19,30 +19,6 @@ public class PetriNetSimulator {
     ArrayList<Transition> transitions = new ArrayList<Transition>();
     ArrayList<Place> places = new ArrayList<Place>();
     ArrayList<Arc> arcs = new ArrayList<Arc>();
-  /* 
-    canvas.addMouseListener(new MouseListener() {
-      public void mousePressed(MouseEvent e) {
-      }
-
-
-      public void mouseClicked(MouseEvent e) {
-      }
-      public void mouseReleased(MouseEvent e) {
-        canvas.repaint();
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-      public void mouseExited(MouseEvent e) {
-      }
-
-
-
-    });
-
-*/
-
-
 
     JFrame simulator = new JFrame("Petri Net Simulator");
     DiagramCanvas canvas = new DiagramCanvas(simulator);
@@ -129,10 +105,14 @@ public class PetriNetSimulator {
     // Simulate
     JMenu mbSim = new JMenu("SIM");
     JMenuItem fireTrans = new JMenuItem("Fire transition");
+    JMenuItem doNextTick = new JMenuItem("Next tick");
 
+    
     mbSim.add(fireTrans);
+    mbSim.add(doNextTick);
 
     fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
+    doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator));
 
 
     menuBar.add(mbFile);
@@ -371,7 +351,7 @@ public class PetriNetSimulator {
 
           String transID = fileReader.nextLine();
           String[] transData = fileReader.nextLine().split("-");
-          
+          fileReader.nextLine(); 
           ArrayList<String> incArcs = new ArrayList<String>();
           data = fileReader.nextLine();
           
@@ -424,7 +404,7 @@ public class PetriNetSimulator {
 
       fileReader.close();
       // all data stored in arrays, add to canvas data, repaint sim, check that arrays have data
-      /*
+     /* 
       for (int i=0; i<places.size(); i++) {
         // print place data
         places.get(i).printData();
@@ -438,6 +418,9 @@ public class PetriNetSimulator {
         arcs.get(i).printData();
       }
 */
+      
+
+
       canvas.setPlaces(places);
       canvas.setTransitions(transitions);
       canvas.setArcs(arcs);
@@ -619,11 +602,13 @@ public class PetriNetSimulator {
         if (title.equals("Fire transition")) {
           if (!doesTransitionExist(transitions, box1Text)) {
             callErrorBox("Label does not match any transition,\n or transition is not enabled");
-          } else if (!isTransitionEnabled(box1Text, places, transitions, arcs)) {
-            callErrorBox("Transition is not enabled");
           } else {
             String IDToPass = getTransIDFromLabel(box1Text, transitions);
-            fireTransition(places, transitions, arcs, IDToPass, canvas);
+            if (!isTransitionEnabled(IDToPass, places, transitions, arcs)) {
+              callErrorBox("Transition is not enabled");
+            } else {
+              fireTransition(places, transitions, arcs, IDToPass, canvas);
+            }
           }
         } else if (title.equals("Remove arc")) {
           if (!doesArcExist(arcs, box1Text)) {
@@ -895,13 +880,17 @@ public class PetriNetSimulator {
       }
     }
     
-    ArrayList<String> arcsList = t.getIncomingArcsList();
+    ArrayList<String> arcsList = new ArrayList<String>();
+
+    arcsList = t.getIncomingArcsList();
     // check that for every incoming arc that the place it originates from has tokens >= the weight of the incoming arc
     if (arcsList.size() == 0) { // source transition
       return true;
     }
 
+
     ArrayList<PlaceIndexArcID> placeIndexes = new ArrayList<PlaceIndexArcID>();
+
 
     for (int i=0; i<arcsList.size(); i++) {
       for (int j=0; j<places.size(); j++) {
@@ -910,6 +899,7 @@ public class PetriNetSimulator {
         }
       }
     }
+
 
     for (int i=0; i<placeIndexes.size(); i++) {
       if (places.get(placeIndexes.get(i).getIndex()).getTokens() < getArcWeight(arcs, placeIndexes.get(i).getArcID())) {
@@ -922,7 +912,7 @@ public class PetriNetSimulator {
 
   public static int getArcWeight(ArrayList<Arc> arcs, String arcID) {
     for (int i=0; i<arcs.size(); i++) {
-      if (arcs.get(i).getID() == arcID) {
+      if (arcs.get(i).getID().equals(arcID)) {
         return arcs.get(i).getWeight();
       }
     }
@@ -936,11 +926,11 @@ public class PetriNetSimulator {
 
   public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas) {
 
-    System.out.println("In fire transition");
+    //System.out.println("In fire transition");
     Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
       if (transitions.get(i).getID().equals(transitionID)) {
-        System.out.println("Found transition");
+        //System.out.println("Found transition");
         t = transitions.get(i);
         break;
       }
@@ -949,18 +939,18 @@ public class PetriNetSimulator {
     ArrayList<String> incArcs = t.getIncomingArcsList();
     ArrayList<String> outArcs = t.getOutgoingArcsList();
 
-
+/*
     for (int i=0; i<incArcs.size(); i++) {
       System.out.println("Inc arc: " + incArcs.get(i));
     }
     for (int i=0; i<outArcs.size(); i++) {
       System.out.println("Out arc: " + outArcs.get(i));
     }
-
+*/
     for (int i=0; i<incArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
         if (arcs.get(j).getID().equals(incArcs.get(i))) {
-          System.out.println("Remove " + arcs.get(j).getWeight() + " tokens from " + arcs.get(j).getOrigin());
+          //System.out.println("Remove " + arcs.get(j).getWeight() + " tokens from " + arcs.get(j).getOrigin());
           addTokensToPlace(-arcs.get(j).getWeight(), places, arcs.get(j).getOrigin()); // adding negative token value
           break;
         }
@@ -971,8 +961,6 @@ public class PetriNetSimulator {
     for (int i=0; i<outArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
         if (arcs.get(j).getID().equals(outArcs.get(i))) {
-
-
           addTokensToPlace(arcs.get(j).getWeight(), places, arcs.get(j).getEndpoint());
           break;
         }
@@ -986,10 +974,33 @@ public class PetriNetSimulator {
 
   }
 
-  // next tick
-  // save
-  // load
-  // new file 
+
+  public static void nextTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+    // get ids of enabled transitions
+    ArrayList<String> enabledTrans = new ArrayList<String>();
+
+    for (int i=0; i<transitions.size(); i++) {
+      String currID = transitions.get(i).getID();
+      if (isTransitionEnabled(currID, places, transitions, arcs)) {
+        enabledTrans.add(currID);
+      }
+    }
+
+    if (enabledTrans.size() == 0) {
+      System.out.println("No transitions enabled");
+      return;
+    }
+
+    // pick a random id from these
+    int randIndex = (int) Math.floor((Math.random() * enabledTrans.size())); 
+    System.out.println("Random index chosen: " + randIndex);
+
+    // fire this transition
+    fireTransition(places, transitions, arcs, enabledTrans.get(randIndex), canvas);
+
+    sim.repaint();
+
+  }
 
 
   public static boolean doesArcExist(ArrayList<Arc> arcs, String arcLabel) {

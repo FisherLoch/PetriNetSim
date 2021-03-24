@@ -27,9 +27,11 @@ public class Transition {
   public void printData() {
     System.out.println(ID + ": oX: " + originX + ", oY: " + originY);
     System.out.println("Arcs:");
+    System.out.println("Outgoing arcs:");
     for (int i=0; i<outgoingArcs.size(); i++) {
       System.out.println(outgoingArcs.get(i));
     }
+    System.out.println("Incoming arcs:");
     for (int i=0; i<incomingArcs.size(); i++) {
       System.out.println(incomingArcs.get(i));
     }
@@ -53,6 +55,8 @@ public class Transition {
     label = l;
     originX = x;
     originY = y;
+
+    //System.out.println("Incoming arcs list: " + incArcs);
     incomingArcs = incArcs;
     outgoingArcs = outArcs;
     canvas = c;
