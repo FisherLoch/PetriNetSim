@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.Scanner;
+import java.lang.Thread;
+import java.lang.InterruptedException;
 
 
 public class PetriNetSimulator {
@@ -106,13 +108,16 @@ public class PetriNetSimulator {
     JMenu mbSim = new JMenu("SIM");
     JMenuItem fireTrans = new JMenuItem("Fire transition");
     JMenuItem doNextTick = new JMenuItem("Next tick");
+    JMenuItem doXTicks = new JMenuItem("Do x ticks");
 
     
     mbSim.add(fireTrans);
     mbSim.add(doNextTick);
+    mbSim.add(doXTicks);
 
     fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
     doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator));
+    doXTicks.addActionListener(e -> callPopupMenuSingleBox("Next X ticks", simulator, places, transitions, arcs, canvas, "Ticks to do:"));
 
 
     menuBar.add(mbFile);
@@ -631,6 +636,18 @@ public class PetriNetSimulator {
             String IDToPass = getTransIDFromLabel(box1Text, transitions);
             removePlace(IDToPass, places, transitions, arcs, canvas);
           }
+        } else if (title.equals("Next X ticks")) {
+          if (!isNumeric(box1Text)) {
+            callErrorBox("         Not a number");
+          } else if (Integer.parseInt(box1Text) < 0) {
+            callErrorBox("Number cannot be less than 0");
+          } else if (Integer.parseInt(box1Text) > 30) {
+            callErrorBox("Number cannot be more than 30");
+          } else {
+            int ticks = Integer.parseInt(box1Text);
+            nextXTicks(places, transitions, arcs, canvas, sim, ticks);
+          }
+          
         }
 
         popupMenu.dispose();
@@ -972,6 +989,19 @@ public class PetriNetSimulator {
 
 
 
+  }
+
+  public static void nextXTicks(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, int ticksToPass) {
+    for (int i=0; i<ticksToPass; i++) {
+      nextTick(places, transitions, arcs, canvas, sim);
+      /*
+      try {
+        Thread.sleep(1000);
+        sim.repaint();
+      } catch (InterruptedException e) {
+        System.out.println("Error in thread sleep");
+      }*/
+    }
   }
 
 
