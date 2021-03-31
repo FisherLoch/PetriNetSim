@@ -1009,12 +1009,16 @@ public class PetriNetSimulator {
     // get ids of enabled transitions
     ArrayList<String> enabledTrans = new ArrayList<String>();
 
+    /*
     for (int i=0; i<transitions.size(); i++) {
       String currID = transitions.get(i).getID();
       if (isTransitionEnabled(currID, places, transitions, arcs)) {
         enabledTrans.add(currID);
       }
     }
+    */
+
+    getEnabledTransitions(places, transitions, arcs, enabledTrans);
 
     if (enabledTrans.size() == 0) {
       System.out.println("No transitions enabled");
@@ -1030,6 +1034,16 @@ public class PetriNetSimulator {
 
     sim.repaint();
 
+  }
+
+
+  public static void getEnabledTransitions(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, ArrayList<String> enabledTrans) {
+    for (int i=0; i<transitions.size(); i++) {
+      String currID = transitions.get(i).getID();
+      if (isTransitionEnabled(currID, places, transitions, arcs)) {
+        enabledTrans.add(currID);
+      }
+    }
   }
 
 
