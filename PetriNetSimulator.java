@@ -14,6 +14,10 @@ import java.lang.InterruptedException;
 
 
 public class PetriNetSimulator {
+
+
+  static Thread t;
+
   public static void main(String[] args) {
     System.out.println("Petri Net Simulator");
 
@@ -109,15 +113,21 @@ public class PetriNetSimulator {
     JMenuItem fireTrans = new JMenuItem("Fire transition");
     JMenuItem doNextTick = new JMenuItem("Next tick");
     JMenuItem doXTicks = new JMenuItem("Do x ticks");
+    JMenuItem autoTick = new JMenuItem("Auto run");
+    JMenuItem stopAutoSim = new JMenuItem("Stop auto run");
 
     
     mbSim.add(fireTrans);
     mbSim.add(doNextTick);
     mbSim.add(doXTicks);
+    mbSim.add(autoTick);
+    mbSim.add(stopAutoSim);
 
     fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
     doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator));
     doXTicks.addActionListener(e -> callPopupMenuSingleBox("Next X ticks", simulator, places, transitions, arcs, canvas, "Ticks to do:"));
+    autoTick.addActionListener(e -> callPopupMenu("Auto run simulator", simulator, "Ticks per second:", "Number of ticks:", places, transitions, arcs, canvas));
+    stopAutoSim.addActionListener(e -> stopSim());
 
 
     menuBar.add(mbFile);
@@ -532,6 +542,11 @@ public class PetriNetSimulator {
           } else {
             callErrorBox("Label 1 does not match any item");
           }
+        } else if (title.equals("Auto run simulator")) {
+          // check values are right in each box, limits
+
+          // call to run thread with relevant values
+          autoRunSim(10, 1, places, transitions, arcs, canvas, sim);
         }
 
         popupMenu.dispose();
@@ -544,6 +559,30 @@ public class PetriNetSimulator {
     popupMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
+  }
+
+
+  public static void autoRunSim(int ticks, int ticksPerSecond, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+
+    t = new Thread() {
+      public void run() {
+        for (int i=0; i<ticks; i++) {
+          
+          System.out.println("Next tick");
+          try {
+            Thread.sleep(5000);
+          } catch (InterruptedException e) {
+            System.out.println("Error sleeping thread");
+          } 
+        }
+      }
+    };
+
+    t.start();
+  }
+
+  public static void stopSim() {
+    t.stop();
   }
 
   public static void callErrorBox(String eMsg) {
