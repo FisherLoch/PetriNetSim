@@ -16,7 +16,7 @@ import java.lang.InterruptedException;
 public class PetriNetSimulator {
 
 
-  static Thread t;
+  static Thread t = new Thread();
 
   public static void main(String[] args) {
     System.out.println("Petri Net Simulator");
@@ -31,7 +31,12 @@ public class PetriNetSimulator {
 
     simulator.setLayout(null);
 
-    simulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // check whether this can be replaced with a function to save automatically
+    simulator.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // check whether this can be replaced with a function to save automatically
+    simulator.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        simClosed(places, transitions, arcs, canvas, simulator);
+      }
+    });
     simulator.setSize(2000, 1500);
     JMenuBar menuBar = new JMenuBar();
     // Debugging
@@ -126,7 +131,7 @@ public class PetriNetSimulator {
     fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
     doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator));
     doXTicks.addActionListener(e -> callPopupMenuSingleBox("Next X ticks", simulator, places, transitions, arcs, canvas, "Ticks to do:"));
-    autoTick.addActionListener(e -> callPopupMenu("Auto run simulator", simulator, "Ticks per second:", "Number of ticks:", places, transitions, arcs, canvas));
+    autoTick.addActionListener(e -> callPopupMenu("Auto run simulator", simulator, "Number of ticks:", "Ticks per sec:", places, transitions, arcs, canvas));
     stopAutoSim.addActionListener(e -> stopSim());
 
 
@@ -139,6 +144,8 @@ public class PetriNetSimulator {
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
 
+    simOpened(places, transitions, arcs, canvas, simulator);
+
    /* 
     addNewPlace(places, canvas);
     addNewPlace(places, canvas);
@@ -148,6 +155,23 @@ public class PetriNetSimulator {
     simulator.repaint();
     */
     
+  }
+
+
+  public static void simOpened(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+    openFile(places, transitions, arcs, "autoSaveFile", sim, canvas);
+
+  }
+
+
+  public static void simClosed(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) { // auto save upon closing
+    System.out.println("Sim closed: ");
+    if (t.isAlive()) {
+      t.stop();
+    }
+    // save here
+    saveFile(places, transitions, arcs, "autoSaveFile", 0);
+    sim.dispose();
   }
 
 
@@ -544,9 +568,20 @@ public class PetriNetSimulator {
           }
         } else if (title.equals("Auto run simulator")) {
           // check values are right in each box, limits
+          if (!isNumeric(origText)) {
+            callErrorBox("Enter an integer in ticks box");
+          } else if ((Integer.parseInt(origText) < 1) || (Integer.parseInt(origText) > 100)) {
+            callErrorBox("Number of ticks must be a value from 1-100");
+          } else if (!isNumericDouble(newText)) {
+            callErrorBox("Enter a number in ticks per second box");
+          } else if ((Double.parseDouble(newText) <= 0) || (Double.parseDouble(newText) > 1000)) {
+            callErrorBox("Number of ticks per second must be 0-1000 not including 0");
+          } else {
+            double tps = Double.parseDouble(newText);
+            int ticks = Integer.parseInt(origText);
 
-          // call to run thread with relevant values
-          autoRunSim(10, 1, places, transitions, arcs, canvas, sim);
+            autoRunSim(ticks, tps, places, transitions, arcs, canvas, sim);
+          }
         }
 
         popupMenu.dispose();
@@ -562,15 +597,18 @@ public class PetriNetSimulator {
   }
 
 
-  public static void autoRunSim(int ticks, int ticksPerSecond, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+  public static void autoRunSim(int ticks, double ticksPerSecond, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
 
     t = new Thread() {
       public void run() {
-        for (int i=0; i<ticks; i++) {
-          
+
+        int sleepTime = (int) Math.round(1000/ticksPerSecond);
+        
+        for (int i=0; i<ticks; i++) { 
           System.out.println("Next tick");
+          nextTick(places, transitions, arcs, canvas, sim);
           try {
-            Thread.sleep(5000);
+            Thread.sleep(sleepTime);
           } catch (InterruptedException e) {
             System.out.println("Error sleeping thread");
           } 
@@ -613,6 +651,15 @@ public class PetriNetSimulator {
       return false;
     }
     return s.matches("\\d+");
+  }
+
+  public static boolean isNumericDouble(String s) {
+    try {
+      Double.parseDouble(s);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 
 
