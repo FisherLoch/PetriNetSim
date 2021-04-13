@@ -26,6 +26,8 @@ public class PetriNetSimulator {
     ArrayList<Place> places = new ArrayList<Place>();
     ArrayList<Arc> arcs = new ArrayList<Arc>();
 
+    ArrayList<String> transitionsFired = new ArrayList<String>();
+
     JFrame simulator = new JFrame("Petri Net Simulator");
     DiagramCanvas canvas = new DiagramCanvas(simulator);
 
@@ -76,7 +78,7 @@ public class PetriNetSimulator {
     mbAdd.add(addPlace);
     mbAdd.add(addTransition);
 
-    addArc.addActionListener(e -> callPopupMenu("Add new arc", simulator, "Label of Origin:", "Label of endpoint:", places, transitions, arcs, canvas)); 
+    addArc.addActionListener(e -> callPopupMenu("Add new arc", simulator, "Label of Origin:", "Label of endpoint:", places, transitions, arcs, canvas, transitionsFired)); 
     addPlace.addActionListener(e -> addNewPlace(places, canvas));
     addTransition.addActionListener(e -> addNewTransition(transitions, canvas));
 
@@ -92,9 +94,9 @@ public class PetriNetSimulator {
     mbRemove.add(removePlace);
     mbRemove.add(removeTransition);
 
-    removeArc.addActionListener(e -> callPopupMenuSingleBox("Remove arc", simulator, places, transitions, arcs, canvas, "Label:"));
-    removePlace.addActionListener(e -> callPopupMenuSingleBox("Remove place", simulator, places, transitions, arcs, canvas, "Label:"));
-    removeTransition.addActionListener(e -> callPopupMenuSingleBox("Remove transition", simulator, places, transitions, arcs, canvas, "Label:"));
+    removeArc.addActionListener(e -> callPopupMenuSingleBox("Remove arc", simulator, places, transitions, arcs, canvas, "Label:", transitionsFired));
+    removePlace.addActionListener(e -> callPopupMenuSingleBox("Remove place", simulator, places, transitions, arcs, canvas, "Label:", transitionsFired));
+    removeTransition.addActionListener(e -> callPopupMenuSingleBox("Remove transition", simulator, places, transitions, arcs, canvas, "Label:", transitionsFired));
 
 
 
@@ -108,9 +110,9 @@ public class PetriNetSimulator {
     mbEdit.add(changeLabel);
     mbEdit.add(setWeight);
 
-    changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places, transitions, arcs, canvas));
-    setWeight.addActionListener(e -> callPopupMenu("Set new arc weight", simulator, "Arc Label:", "New weight:", places, transitions, arcs, canvas));
-    setTokens.addActionListener(e -> callPopupMenu("Set new tokens in Place", simulator, "Place Label:", "New tokens:", places, transitions, arcs, canvas));
+    changeLabel.addActionListener(e -> callPopupMenu("Change label", simulator, "Label:", "New label:", places, transitions, arcs, canvas, transitionsFired));
+    setWeight.addActionListener(e -> callPopupMenu("Set new arc weight", simulator, "Arc Label:", "New weight:", places, transitions, arcs, canvas, transitionsFired));
+    setTokens.addActionListener(e -> callPopupMenu("Set new tokens in Place", simulator, "Place Label:", "New tokens:", places, transitions, arcs, canvas, transitionsFired));
  
 
     // Simulate
@@ -120,6 +122,7 @@ public class PetriNetSimulator {
     JMenuItem doXTicks = new JMenuItem("Do x ticks");
     JMenuItem autoTick = new JMenuItem("Auto run");
     JMenuItem stopAutoSim = new JMenuItem("Stop auto run");
+    JMenuItem undoTick = new JMenuItem("Undo tick");
 
     
     mbSim.add(fireTrans);
@@ -127,12 +130,14 @@ public class PetriNetSimulator {
     mbSim.add(doXTicks);
     mbSim.add(autoTick);
     mbSim.add(stopAutoSim);
+    mbSim.add(undoTick);
 
-    fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:"));
-    doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator));
-    doXTicks.addActionListener(e -> callPopupMenuSingleBox("Next X ticks", simulator, places, transitions, arcs, canvas, "Ticks to do:"));
-    autoTick.addActionListener(e -> callPopupMenu("Auto run simulator", simulator, "Number of ticks:", "Ticks per sec:", places, transitions, arcs, canvas));
+    fireTrans.addActionListener(e -> callPopupMenuSingleBox("Fire transition", simulator, places, transitions, arcs, canvas, "Label:", transitionsFired));
+    doNextTick.addActionListener(e -> nextTick(places, transitions, arcs, canvas, simulator, transitionsFired));
+    doXTicks.addActionListener(e -> callPopupMenuSingleBox("Next X ticks", simulator, places, transitions, arcs, canvas, "Ticks to do:", transitionsFired));
+    autoTick.addActionListener(e -> callPopupMenu("Auto run simulator", simulator, "Number of ticks:", "Ticks per sec:", places, transitions, arcs, canvas, transitionsFired));
     stopAutoSim.addActionListener(e -> stopSim());
+    undoTick.addActionListener(e -> undoTick(places, transitions, arcs, canvas, simulator, transitionsFired));
 
 
     menuBar.add(mbFile);
@@ -473,7 +478,7 @@ public class PetriNetSimulator {
       
   }
 
-  public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas) {
+  public static void callPopupMenu(String title, JFrame sim, String l1, String l2, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, ArrayList<String> transFired) {
     JFrame popupMenu = new JFrame(title);
     popupMenu.setLayout(null);
     JTextField orig = new JTextField(20);
@@ -580,7 +585,7 @@ public class PetriNetSimulator {
             double tps = Double.parseDouble(newText);
             int ticks = Integer.parseInt(origText);
 
-            autoRunSim(ticks, tps, places, transitions, arcs, canvas, sim);
+            autoRunSim(ticks, tps, places, transitions, arcs, canvas, sim, transFired);
           }
         }
 
@@ -597,7 +602,7 @@ public class PetriNetSimulator {
   }
 
 
-  public static void autoRunSim(int ticks, double ticksPerSecond, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+  public static void autoRunSim(int ticks, double ticksPerSecond, ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, ArrayList<String> transFired) {
 
     t = new Thread() {
       public void run() {
@@ -606,7 +611,7 @@ public class PetriNetSimulator {
         
         for (int i=0; i<ticks; i++) { 
           System.out.println("Next tick");
-          nextTick(places, transitions, arcs, canvas, sim);
+          nextTick(places, transitions, arcs, canvas, sim, transFired);
           try {
             Thread.sleep(sleepTime);
           } catch (InterruptedException e) {
@@ -663,7 +668,7 @@ public class PetriNetSimulator {
   }
 
 
-  public static void callPopupMenuSingleBox(String title, JFrame sim, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, String l1) {
+  public static void callPopupMenuSingleBox(String title, JFrame sim, ArrayList<Place> places, ArrayList<Transition>  transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, String l1, ArrayList<String> transFired) {
     JFrame popupMenu = new JFrame(title);
     popupMenu.setLayout(null);
     JTextField box1 = new JTextField(20);
@@ -698,7 +703,7 @@ public class PetriNetSimulator {
             if (!isTransitionEnabled(IDToPass, places, transitions, arcs)) {
               callErrorBox("Transition is not enabled");
             } else {
-              fireTransition(places, transitions, arcs, IDToPass, canvas);
+              fireTransition(places, transitions, arcs, IDToPass, canvas, transFired);
             }
           }
         } else if (title.equals("Remove arc")) {
@@ -731,7 +736,7 @@ public class PetriNetSimulator {
             callErrorBox("Number cannot be more than 30");
           } else {
             int ticks = Integer.parseInt(box1Text);
-            nextXTicks(places, transitions, arcs, canvas, sim, ticks);
+            nextXTicks(places, transitions, arcs, canvas, sim, ticks, transFired);
           }
           
         }
@@ -1027,7 +1032,8 @@ public class PetriNetSimulator {
 
   // fire transition
 
-  public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas) {
+  public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas, ArrayList<String> transFired) {
+    transFired.add(transitionID);
 
     //System.out.println("In fire transition");
     Transition t = new Transition();
@@ -1077,9 +1083,9 @@ public class PetriNetSimulator {
 
   }
 
-  public static void nextXTicks(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, int ticksToPass) {
+  public static void nextXTicks(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, int ticksToPass, ArrayList<String> transFired) {
     for (int i=0; i<ticksToPass; i++) {
-      nextTick(places, transitions, arcs, canvas, sim);
+      nextTick(places, transitions, arcs, canvas, sim, transFired);
       /*
       try {
         Thread.sleep(1000);
@@ -1091,7 +1097,7 @@ public class PetriNetSimulator {
   }
 
 
-  public static void nextTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim) {
+  public static void nextTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, ArrayList<String> transFired) {
     // get ids of enabled transitions
     ArrayList<String> enabledTrans = new ArrayList<String>();
 
@@ -1116,10 +1122,69 @@ public class PetriNetSimulator {
     System.out.println("Random index chosen: " + randIndex);
 
     // fire this transition
-    fireTransition(places, transitions, arcs, enabledTrans.get(randIndex), canvas);
+    fireTransition(places, transitions, arcs, enabledTrans.get(randIndex), canvas, transFired);
 
     sim.repaint();
 
+  }
+
+
+  public static void undoTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, ArrayList<String> transFired) {
+    // get size of array
+    // val in size -1 is transition ID
+    // unfire that transition
+    // remove val in size -1
+    int listSize = transFired.size();
+    if (listSize == 0) {
+      callErrorBox("No transitions to undo");
+      return;
+    }
+    String idToUndo = transFired.get(listSize - 1);
+    
+    unfireTransition(places, transitions, arcs, canvas, sim, idToUndo);
+
+    transFired.remove(listSize - 1);
+  }
+
+  public static void unfireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, String transitionID) {
+    // remove tokens based on arc weight from all outgoing
+    // add tokens based on arc weight to all incoming
+    // dont need to check if its enabled
+    
+
+    Transition t = new Transition();
+    for (int i=0; i<transitions.size(); i++) {
+      if (transitions.get(i).getID().equals(transitionID)) {
+        t = transitions.get(i);
+        break;
+      }
+    }
+
+    ArrayList<String> incArcs = t.getIncomingArcsList();
+    ArrayList<String> outArcs = t.getOutgoingArcsList();
+
+    for (int i=0; i<incArcs.size(); i++) {
+      for (int j=0; j<arcs.size(); j++) {
+        if (arcs.get(j).getID().equals(incArcs.get(i))) {
+          addTokensToPlace(arcs.get(j).getWeight(), places, arcs.get(j).getOrigin()); 
+          break;
+        }
+      }
+    }
+
+
+    for (int i=0; i<outArcs.size(); i++) {
+      for (int j=0; j<arcs.size(); j++) {
+        if (arcs.get(j).getID().equals(outArcs.get(i))) {
+          addTokensToPlace(-arcs.get(j).getWeight(), places, arcs.get(j).getEndpoint());
+          break;
+        }
+      }
+    }
+
+    canvas.setPlaces(places);
+
+    sim.repaint();
   }
 
 
