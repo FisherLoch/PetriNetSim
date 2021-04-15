@@ -62,6 +62,21 @@ public class Transition {
     canvas = c;
   }
 
+
+  public Transition(Transition t) {
+    this.ID = t.getID();
+    this.outgoingArcs = t.getOutgoingArcsList();
+    this.incomingArcs = t.getIncomingArcsList();
+    this.label = t.getLabel();
+
+/*
+    this.ID = t.ID;
+    this.outgoingArcs = t.outgoingArcs;
+    this.incomingArcs = t.incomingArcs;
+    this.label = t.label;
+    */
+  }
+
   public Transition() {
     // placeholder constructor for blank transition to initialise variable
   }

@@ -1,0 +1,29 @@
+New place
+Place51746879-1495-414f-9c18-115617b8c1eb
+Place 1-2-127-325
+incArcs
+outArcs
+Arcf93515d0-df36-4580-9549-4c1cbc1f3b21
+New place
+Placede721b24-07a7-4d70-9061-eec9bb9bdb1b
+Place 2-1-609-337
+incArcs
+Arcfa7dd8f0-0285-4dc3-970e-f5e417dd96e6
+outArcs
+New transition
+Transba979729-55f6-46d7-a186-52fcd15146bd
+Transition 1-352-294
+incArcs
+Arcf93515d0-df36-4580-9549-4c1cbc1f3b21
+outArcs
+Arcfa7dd8f0-0285-4dc3-970e-f5e417dd96e6
+New arc
+Arcf93515d0-df36-4580-9549-4c1cbc1f3b21
+Arc 1-1
+Place51746879-1495-414f-9c18-115617b8c1eb
+Transba979729-55f6-46d7-a186-52fcd15146bd
+New arc
+Arcfa7dd8f0-0285-4dc3-970e-f5e417dd96e6
+Arc 2-1
+Transba979729-55f6-46d7-a186-52fcd15146bd
+Placede721b24-07a7-4d70-9061-eec9bb9bdb1b

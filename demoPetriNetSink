@@ -1,0 +1,17 @@
+New place
+Place4571d91c-ac2a-4d94-97d1-1ea8c1762185
+Place 1-3-155-304
+incArcs
+outArcs
+Arc90130b1f-6019-4b54-8a41-a4e21795a949
+New transition
+Trans8ab01033-5212-4538-a449-e47bd2e759fb
+Transition 1-419-264
+incArcs
+Arc90130b1f-6019-4b54-8a41-a4e21795a949
+outArcs
+New arc
+Arc90130b1f-6019-4b54-8a41-a4e21795a949
+Arc 1-3
+Place4571d91c-ac2a-4d94-97d1-1ea8c1762185
+Trans8ab01033-5212-4538-a449-e47bd2e759fb

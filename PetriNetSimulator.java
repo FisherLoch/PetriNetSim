@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import simComponents.*;
 import java.awt.event.*;
 import java.io.File;
@@ -140,11 +141,21 @@ public class PetriNetSimulator {
     undoTick.addActionListener(e -> undoTick(places, transitions, arcs, canvas, simulator, transitionsFired));
 
 
+    // Compute
+    JMenu mbCompute = new JMenu("COMPUTE");
+    JMenuItem reachGraph = new JMenuItem("Reachability graph");
+
+    reachGraph.addActionListener(e -> reachabilityGraph(places, transitions, arcs));
+
+    mbCompute.add(reachGraph);
+
+
     menuBar.add(mbFile);
     menuBar.add(mbAdd);
     menuBar.add(mbRemove);
     menuBar.add(mbEdit);
     menuBar.add(mbSim);
+    menuBar.add(mbCompute);
 
     simulator.setJMenuBar(menuBar);
     simulator.setVisible(true);
@@ -1278,11 +1289,107 @@ public class PetriNetSimulator {
 
 
 
-  // rendering
+  public static String getStringFromModel(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable) {
+    
+    String modelData = "";
+    // format:  P1-5-2*T1-1*T2:P2-3-4*T1:P3-2:P4-3/T1-2*P3-1*P4:T2-1*P4
+    //        place-tokens-weight*transition-weight*transition-etc:place2-tokens-weight*transition-etc/
+    //        transition-weight*place-weight*place-weight*place-etc:transition-weight*place-weight*place-etc
+
+    // go through places, go through outgoing arcs, weight and transition label added for each,
+    // go through transitions, go through outgoing arcs, weight and place label for each
+
+
+    for (int i=0; i<places.length; i++) {
+      // get outgoing arcs list, get arc from table, get weight and endpoint, add to string, do for all arcs, then do next place 
+      modelData = modelData + places[i].getLabel() + "-" + places[i].getTokens() + "-";
+
+      ArrayList<String> outArcs = places[i].getOutgoingArcsList();
+      for (int j=0; j<outArcs.size(); j++) {
+        Arc a = arcTable.get(outArcs.get(j));
+        modelData = modelData + a.getWeight() + "*" + a.getEndpoint() + "-";
+      }
+      modelData = modelData + ":";
+    }
+
+    modelData = modelData + "/";
 
 
 
+    for (int i=0; i<transitions.length; i++) {
+      // get outoing arcs list, get arc from table, get weight and endpoint, add to string, do for all arcs, then do next transition
+      modelData = modelData + transitions[i].getLabel() + "-";
 
+      ArrayList<String> outArcs = transitions[i].getOutgoingArcsList();
+      for (int j=0; j<outArcs.size(); j++) {
+        Arc a = arcTable.get(outArcs.get(j));
+        modelData = modelData + a.getWeight() + "*" + a.getEndpoint() + "-";
+      }
+      modelData = modelData + ":";
+    }
+
+
+
+    System.out.println("modelData: " + modelData);
+    return modelData;
+  }
+
+
+  public static void reachabilityGraph(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
+    // change arraylists into arrays, pass into getStringFromModel
+    // create new arrayList with String for modelDatas, pass into getReachabilityGraph functiono
+
+    
+
+    Place placeArr[] = new Place[places.size()];
+    Hashtable<String, Place> placeTable = new Hashtable<String, Place>(places.size());
+    
+    for (int i=0; i<places.size(); i++) {
+      placeArr[i] = new Place(places.get(i));
+      placeArr[i].setLabel("P" + i);
+      placeTable.put(placeArr[i].getID(), placeArr[i]);
+    }
+
+    Transition transArr[] = new Transition[transitions.size()];
+    Hashtable<String, Transition> transTable = new Hashtable<String, Transition>(transitions.size());
+    for (int i=0; i<transitions.size(); i++) {
+      transArr[i] = new Transition(transitions.get(i));
+      transArr[i].setLabel("T" + i);
+      transTable.put(transArr[i].getID(), transArr[i]);
+    } 
+
+
+    Arc arcArr[] = new Arc[arcs.size()];
+    Hashtable<String, Arc> arcTable = new Hashtable<String, Arc>(arcs.size());
+    for (int i=0; i<arcs.size(); i++) {
+      arcArr[i] = new Arc(arcs.get(i));
+
+      if (arcArr[i].getEndpoint().substring(0, 5).equals("Place")) {
+        // endpoint is place
+        arcArr[i].setEndpoint(placeTable.get(arcArr[i].getEndpoint()).getLabel());
+        // so origin is transition
+        arcArr[i].setOrigin(transTable.get(arcArr[i].getOrigin()).getLabel());
+      } else { // endpoint is transition
+        arcArr[i].setEndpoint(transTable.get(arcArr[i].getEndpoint()).getLabel());
+        arcArr[i].setOrigin(placeTable.get(arcArr[i].getOrigin()).getLabel());
+      }
+
+      arcTable.put(arcArr[i].getID(), arcArr[i]);
+    }
+    
+    getStringFromModel(placeArr, transArr, arcArr, placeTable, transTable, arcTable);
+
+
+    // arrayList when function is done should contain all models up to x depth
+  }
+
+  public static void getReachabilityGraph() {
+    // get enabled transitions
+    // for each, do the transition and pass back into get reachability graph
+    // add each new model to arraylist of models, if true not already set in hash table that is passed down
+
+    // allow user to set depth?
+  }
 
 
 

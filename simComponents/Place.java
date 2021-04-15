@@ -6,6 +6,8 @@ import java.awt.*;
 
 import java.util.regex.*;
 
+import simComponents.*;
+
 public class Place {
   String ID;
   ArrayList<String> outgoingArcs = new ArrayList<String>();
@@ -49,6 +51,23 @@ public class Place {
     label = l;
     centreX = cX;
     centreY = cY;
+  }
+
+
+  public Place(Place p) {
+    this.ID = p.getID();
+    this.outgoingArcs = p.getOutgoingArcsList();
+    this.incomingArcs = p.getIncomingArcsList();
+    this.tokens = p.getTokens();
+    this.label = p.getLabel();
+
+/*
+    this.ID = p.ID;
+    this.outgoingArcs = p.outgoingArcs;
+    this.incomingArcs = p.incomingArcs;
+    this.tokens = p.tokens;
+    this.label = p.label;
+    */
   }
 
   public String getID() {

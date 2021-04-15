@@ -29,6 +29,22 @@ public class Arc {
     weight = w;
   }
 
+  public Arc(Arc a) {
+    this.ID = a.getID();
+    this.label = a.getLabel();
+    this.origin = a.getOrigin();
+    this.endpoint = a.getEndpoint();
+    this.weight = a.getWeight();
+
+/*
+    this.ID = a.ID;
+    this.label = a.label;
+    this.origin = a.origin;
+    this.endpoint = a.endpoint;
+    this.weight = a.weight;
+    */
+  }
+
   public String getID() {
     return ID;
   }
