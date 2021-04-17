@@ -1,0 +1,210 @@
+New place
+Placea46b5a57-fd6e-46b9-bff9-b6285848cbae
+Place 1-1-109-413
+incArcs
+Arcc0b26f7c-7e8b-4429-9365-76b7b1178730
+outArcs
+Arc04000bcc-601a-42e2-9e28-e80c8f61abd2
+New place
+Place92b827f5-b47d-427f-b1cf-5a27b48fcb7c
+Place 2-0-391-267
+incArcs
+Arc90f24f4f-d5bc-42dd-8c38-6b00f1d4ef86
+outArcs
+Arcc7458369-ca8b-4a9f-a97a-f89608a742a6
+New place
+Place5ac952b3-abe7-4f01-90e4-941d3375f3be
+Place 3-0-380-439
+incArcs
+Arc6aae3886-147c-47b4-9a6e-f4391866617c
+outArcs
+Arc46d3d994-5431-4ae7-aff2-8f4a0ba39f06
+New place
+Place184685d7-bfcb-4e41-b3e9-268919555aec
+Place 4-1-668-233
+incArcs
+Arcbe25fd49-b776-4bf0-bde1-0ba40fd80b53
+Arcf51a6f7b-afae-44b3-a870-61cef65a047e
+outArcs
+Arcc7ed10b1-c0e4-4ffc-aaa8-6950ef3af7fc
+Arce0dd02da-dfd2-41d3-b118-ddae18da192c
+New place
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+Place 5-1-855-249
+incArcs
+Arc6f7f4f6c-3146-4343-9cdf-f01c3977c47a
+Arccf1f8d19-5dff-4fae-92ad-dd4568a32cf0
+outArcs
+Arc37840981-6023-42dd-b940-e5b596d9a001
+Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
+New place
+Place15fce1db-9601-42f3-9c56-e23d8e267121
+Place 6-1-1518-521
+incArcs
+Arcc24fcbcb-2920-41ca-a4e5-598297a0d5ec
+outArcs
+Arcacbc6f89-9b40-4e8e-b89c-8d4ab94542c8
+New place
+Place0e3d51ab-256c-42b0-8bd5-6491c2dcdb74
+Place 7-0-1103-339
+incArcs
+Arc761f7139-1651-4eef-a50e-821cacca3226
+outArcs
+Arc667b5255-c040-430a-a83e-28750de51429
+New place
+Placec7b3462b-26da-4be4-b3c0-bf9a9c3ef98d
+Place 8-0-1137-579
+incArcs
+Arc4c25c535-dd07-4cdd-a66d-6e6b0cf82017
+outArcs
+Arcd26b4d7a-64c3-40f1-af39-91205bce2a47
+New transition
+Trans7635ced5-0eef-4fef-b09c-8bf98d00d227
+Transition 1-282-647
+incArcs
+Arc46d3d994-5431-4ae7-aff2-8f4a0ba39f06
+outArcs
+Arcc0b26f7c-7e8b-4429-9365-76b7b1178730
+Arcbe25fd49-b776-4bf0-bde1-0ba40fd80b53
+Arc6f7f4f6c-3146-4343-9cdf-f01c3977c47a
+New transition
+Trans550d7ec7-b213-4fc3-ab00-696466edd89c
+Transition 2-254-92
+incArcs
+Arc04000bcc-601a-42e2-9e28-e80c8f61abd2
+Arcc7ed10b1-c0e4-4ffc-aaa8-6950ef3af7fc
+outArcs
+Arc90f24f4f-d5bc-42dd-8c38-6b00f1d4ef86
+New transition
+Trans8b6efe53-cba8-4b42-bc1f-de988408d1fd
+Transition 3-241-325
+incArcs
+Arcc7458369-ca8b-4a9f-a97a-f89608a742a6
+Arc37840981-6023-42dd-b940-e5b596d9a001
+outArcs
+Arc6aae3886-147c-47b4-9a6e-f4391866617c
+New transition
+Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47
+Transition 4-1268-123
+incArcs
+Arcacbc6f89-9b40-4e8e-b89c-8d4ab94542c8
+Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
+outArcs
+Arc761f7139-1651-4eef-a50e-821cacca3226
+New transition
+Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
+Transition 5-1216-791
+incArcs
+Arcd26b4d7a-64c3-40f1-af39-91205bce2a47
+outArcs
+Arcc24fcbcb-2920-41ca-a4e5-598297a0d5ec
+Arccf1f8d19-5dff-4fae-92ad-dd4568a32cf0
+Arcf51a6f7b-afae-44b3-a870-61cef65a047e
+New transition
+Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
+Transition 6-1237-417
+incArcs
+Arc667b5255-c040-430a-a83e-28750de51429
+Arce0dd02da-dfd2-41d3-b118-ddae18da192c
+outArcs
+Arc4c25c535-dd07-4cdd-a66d-6e6b0cf82017
+New arc
+Arc04000bcc-601a-42e2-9e28-e80c8f61abd2
+Arc 1-1
+Placea46b5a57-fd6e-46b9-bff9-b6285848cbae
+Trans550d7ec7-b213-4fc3-ab00-696466edd89c
+New arc
+Arc90f24f4f-d5bc-42dd-8c38-6b00f1d4ef86
+Arc 2-1
+Trans550d7ec7-b213-4fc3-ab00-696466edd89c
+Place92b827f5-b47d-427f-b1cf-5a27b48fcb7c
+New arc
+Arcc7458369-ca8b-4a9f-a97a-f89608a742a6
+Arc 3-1
+Place92b827f5-b47d-427f-b1cf-5a27b48fcb7c
+Trans8b6efe53-cba8-4b42-bc1f-de988408d1fd
+New arc
+Arc6aae3886-147c-47b4-9a6e-f4391866617c
+Arc 4-1
+Trans8b6efe53-cba8-4b42-bc1f-de988408d1fd
+Place5ac952b3-abe7-4f01-90e4-941d3375f3be
+New arc
+Arc46d3d994-5431-4ae7-aff2-8f4a0ba39f06
+Arc 5-1
+Place5ac952b3-abe7-4f01-90e4-941d3375f3be
+Trans7635ced5-0eef-4fef-b09c-8bf98d00d227
+New arc
+Arcc0b26f7c-7e8b-4429-9365-76b7b1178730
+Arc 6-1
+Trans7635ced5-0eef-4fef-b09c-8bf98d00d227
+Placea46b5a57-fd6e-46b9-bff9-b6285848cbae
+New arc
+Arcc7ed10b1-c0e4-4ffc-aaa8-6950ef3af7fc
+Arc 7-1
+Place184685d7-bfcb-4e41-b3e9-268919555aec
+Trans550d7ec7-b213-4fc3-ab00-696466edd89c
+New arc
+Arcbe25fd49-b776-4bf0-bde1-0ba40fd80b53
+Arc 8-1
+Trans7635ced5-0eef-4fef-b09c-8bf98d00d227
+Place184685d7-bfcb-4e41-b3e9-268919555aec
+New arc
+Arc6f7f4f6c-3146-4343-9cdf-f01c3977c47a
+Arc 9-1
+Trans7635ced5-0eef-4fef-b09c-8bf98d00d227
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+New arc
+Arc37840981-6023-42dd-b940-e5b596d9a001
+Arc 10-1
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+Trans8b6efe53-cba8-4b42-bc1f-de988408d1fd
+New arc
+Arcacbc6f89-9b40-4e8e-b89c-8d4ab94542c8
+Arc 11-1
+Place15fce1db-9601-42f3-9c56-e23d8e267121
+Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47
+New arc
+Arc761f7139-1651-4eef-a50e-821cacca3226
+Arc 12-1
+Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47
+Place0e3d51ab-256c-42b0-8bd5-6491c2dcdb74
+New arc
+Arc667b5255-c040-430a-a83e-28750de51429
+Arc 13-1
+Place0e3d51ab-256c-42b0-8bd5-6491c2dcdb74
+Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
+New arc
+Arc4c25c535-dd07-4cdd-a66d-6e6b0cf82017
+Arc 14-1
+Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
+Placec7b3462b-26da-4be4-b3c0-bf9a9c3ef98d
+New arc
+Arcd26b4d7a-64c3-40f1-af39-91205bce2a47
+Arc 15-1
+Placec7b3462b-26da-4be4-b3c0-bf9a9c3ef98d
+Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
+New arc
+Arcc24fcbcb-2920-41ca-a4e5-598297a0d5ec
+Arc 16-1
+Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
+Place15fce1db-9601-42f3-9c56-e23d8e267121
+New arc
+Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
+Arc 17-1
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47
+New arc
+Arce0dd02da-dfd2-41d3-b118-ddae18da192c
+Arc 18-1
+Place184685d7-bfcb-4e41-b3e9-268919555aec
+Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
+New arc
+Arccf1f8d19-5dff-4fae-92ad-dd4568a32cf0
+Arc 19-1
+Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+New arc
+Arcf51a6f7b-afae-44b3-a870-61cef65a047e
+Arc 20-1
+Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
+Place184685d7-bfcb-4e41-b3e9-268919555aec

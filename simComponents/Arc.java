@@ -9,6 +9,8 @@ public class Arc {
   String origin;
   String endpoint;
   String label;
+  String originID;
+  String endpointID;
   
   public void printData() {
     System.out.println(ID + ": weight: " + weight + "\n Origin: " + origin + "\n Endpoint: " + endpoint);
@@ -32,8 +34,8 @@ public class Arc {
   public Arc(Arc a) {
     this.ID = a.getID();
     this.label = a.getLabel();
-    this.origin = a.getOrigin();
-    this.endpoint = a.getEndpoint();
+    this.originID = a.getOrigin();
+    this.endpointID = a.getEndpoint();
     this.weight = a.getWeight();
 
 /*

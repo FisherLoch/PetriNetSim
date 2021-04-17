@@ -1289,6 +1289,8 @@ public class PetriNetSimulator {
 
 
 
+  // reachability
+
   public static String getStringFromModel(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable) {
     
     String modelData = "";
@@ -1381,14 +1383,27 @@ public class PetriNetSimulator {
 
 
     // arrayList when function is done should contain all models up to x depth
+
+    ArrayList<String> reachableModels = new ArrayList<String>();
+
+
   }
 
-  public static void getReachabilityGraph() {
+  public static void getReachabilityGraph(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, ArrayList<String> reachableModels) {
     // get enabled transitions
     // for each, do the transition and pass back into get reachability graph
+    
+    // need a decent way of storing the data before firing the transition as the objects will get changed as they get passed down
+    // could possibly change back to arraylists and use the unfire transition function??
+
     // add each new model to arraylist of models, if true not already set in hash table that is passed down
 
     // allow user to set depth?
+  }
+
+
+  public static int[] getEnabledTransitionIndexes() {
+
   }
 
 
