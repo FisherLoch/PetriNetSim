@@ -1046,6 +1046,7 @@ public class PetriNetSimulator {
   public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas, ArrayList<String> transFired) {
     transFired.add(transitionID);
 
+
     //System.out.println("In fire transition");
     Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
@@ -1055,6 +1056,8 @@ public class PetriNetSimulator {
         break;
       }
     }
+    
+    setFiredColours(transitions, transFired, t);
 
     ArrayList<String> incArcs = t.getIncomingArcsList();
     ArrayList<String> outArcs = t.getOutgoingArcsList();
@@ -1092,6 +1095,36 @@ public class PetriNetSimulator {
 
 
 
+  }
+
+  public static void setFiredColours(ArrayList<Transition> transitions, ArrayList<String> transFired, Transition t) {
+    if (transFired.size() < 2) {
+      t.setFired();
+    } else {
+      String ID = transFired.get(transFired.size() - 2);
+      for (int i=0; i<transitions.size(); i++) {
+        if (transitions.get(i).getID().equals(ID)) {
+          transitions.get(i).setNotFired();
+          break;
+        }
+      }
+      t.setFired();
+    }
+  }
+
+  public static void setUnfiredColours(ArrayList<Transition> transitions, ArrayList<String> transFired, Transition t) {
+    if (transFired.size() < 2) {
+      t.setNotFired();
+    } else {
+      t.setNotFired();
+      String ID = transFired.get(transFired.size() - 2);
+      for (int i=0; i<transitions.size(); i++) {
+        if (transitions.get(i).getID().equals(ID)) {
+          transitions.get(i).setFired();
+          break;
+        }
+      }
+    }
   }
 
   public static void nextXTicks(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, int ticksToPass, ArrayList<String> transFired) {
@@ -1152,12 +1185,12 @@ public class PetriNetSimulator {
     }
     String idToUndo = transFired.get(listSize - 1);
     
-    unfireTransition(places, transitions, arcs, canvas, sim, idToUndo);
+    unfireTransition(places, transitions, arcs, canvas, sim, idToUndo, transFired);
 
     transFired.remove(listSize - 1);
   }
 
-  public static void unfireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, String transitionID) {
+  public static void unfireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, String transitionID, ArrayList<String> transFired) {
     // remove tokens based on arc weight from all outgoing
     // add tokens based on arc weight to all incoming
     // dont need to check if its enabled
@@ -1170,6 +1203,8 @@ public class PetriNetSimulator {
         break;
       }
     }
+
+    setUnfiredColours(transitions, transFired, t);
 
     ArrayList<String> incArcs = t.getIncomingArcsList();
     ArrayList<String> outArcs = t.getOutgoingArcsList();

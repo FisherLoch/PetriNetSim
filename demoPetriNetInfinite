@@ -1,0 +1,84 @@
+New place
+Place5b05430b-5cf9-48f1-a536-1920384fb4cb
+Place 1-1-490-233
+incArcs
+Arc57408a24-fde5-429f-93a4-1a86b6173185
+Arca80de9fb-dfb6-4eeb-932c-ada2b87d3bcc
+outArcs
+Arc160555d4-dd04-4dc6-b492-b579615bb650
+New place
+Place063a11f8-9173-4ada-8e69-05f35f6c5da4
+Place 2-0-913-241
+incArcs
+Arc8b8380c8-8f15-4491-95ee-53d25baa103e
+outArcs
+Arc596dc592-5929-4ab7-8873-056a267b1737
+Arcaf8620f9-ddb3-4018-8a55-42afa7378b2b
+New place
+Placeabdd3667-cebb-4f1d-a285-188f341cd50a
+Place 3-0-1300-253
+incArcs
+Arc54672169-796f-43bd-acd4-54dc7f9fb6d9
+outArcs
+New transition
+Trans72b3d0f1-c2dd-4471-b997-69cde9ebc2b4
+Transition 1-685-201
+incArcs
+Arc160555d4-dd04-4dc6-b492-b579615bb650
+outArcs
+Arc8b8380c8-8f15-4491-95ee-53d25baa103e
+New transition
+Trans803e7c41-080c-4058-9843-a87a732b7404
+Transition 2-685-350
+incArcs
+Arc596dc592-5929-4ab7-8873-056a267b1737
+outArcs
+Arc57408a24-fde5-429f-93a4-1a86b6173185
+New transition
+Trans201e32c9-bbda-4089-9a6e-92273373f361
+Transition 3-1097-207
+incArcs
+Arcaf8620f9-ddb3-4018-8a55-42afa7378b2b
+outArcs
+Arc54672169-796f-43bd-acd4-54dc7f9fb6d9
+New transition
+Trans96d4a4de-e2b1-461f-aca3-b4d07383b1b0
+Transition 4-289-190
+incArcs
+outArcs
+Arca80de9fb-dfb6-4eeb-932c-ada2b87d3bcc
+New arc
+Arc160555d4-dd04-4dc6-b492-b579615bb650
+Arc 1-1
+Place5b05430b-5cf9-48f1-a536-1920384fb4cb
+Trans72b3d0f1-c2dd-4471-b997-69cde9ebc2b4
+New arc
+Arc8b8380c8-8f15-4491-95ee-53d25baa103e
+Arc 2-5
+Trans72b3d0f1-c2dd-4471-b997-69cde9ebc2b4
+Place063a11f8-9173-4ada-8e69-05f35f6c5da4
+New arc
+Arc596dc592-5929-4ab7-8873-056a267b1737
+Arc 3-3
+Place063a11f8-9173-4ada-8e69-05f35f6c5da4
+Trans803e7c41-080c-4058-9843-a87a732b7404
+New arc
+Arc57408a24-fde5-429f-93a4-1a86b6173185
+Arc 4-1
+Trans803e7c41-080c-4058-9843-a87a732b7404
+Place5b05430b-5cf9-48f1-a536-1920384fb4cb
+New arc
+Arc54672169-796f-43bd-acd4-54dc7f9fb6d9
+Arc 5-2
+Trans201e32c9-bbda-4089-9a6e-92273373f361
+Placeabdd3667-cebb-4f1d-a285-188f341cd50a
+New arc
+Arcaf8620f9-ddb3-4018-8a55-42afa7378b2b
+Arc 6-2
+Place063a11f8-9173-4ada-8e69-05f35f6c5da4
+Trans201e32c9-bbda-4089-9a6e-92273373f361
+New arc
+Arca80de9fb-dfb6-4eeb-932c-ada2b87d3bcc
+Arc 7-1
+Trans96d4a4de-e2b1-461f-aca3-b4d07383b1b0
+Place5b05430b-5cf9-48f1-a536-1920384fb4cb

@@ -20,6 +20,8 @@ public class Transition {
   int height = 80;
   volatile int mouseX = 0;
   volatile int mouseY = 0;
+  
+  boolean fired = false;
 
   DiagramCanvas canvas;
 
@@ -184,9 +186,21 @@ public class Transition {
     return false;
   }
 
+  public void setFired() {
+    fired = true;
+  }
+
+  public void setNotFired() {
+    fired = false;
+  }
+
   public void render(Graphics g) {
     // draw and fill rectangle, can use a rotation value to determine the orientation
-    g.setColor(Color.BLACK);
+    if (fired) {
+      g.setColor(Color.RED);
+    } else {
+      g.setColor(Color.BLACK);
+    }
     g.fillRect(originX, originY, width, height);
     g.drawString(label, originX - 20, originY - 10);
   }
