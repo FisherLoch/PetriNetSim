@@ -88,6 +88,14 @@ public class Arc {
     return endpoint;
   }
 
+  public String getOriginID() {
+    return originID;
+  }
+
+  public String getEndpointID() {
+    return endpointID;
+  }
+
 
   public void renderPlace(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
     g.setColor(Color.BLACK);

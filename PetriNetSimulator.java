@@ -1438,7 +1438,7 @@ public class PetriNetSimulator {
 
     for (int i=0; i<transitions.length; i++) {
       boolean enabled = true;
-      ArrayList<String> incArcs = transitions[i].getIncomingArrayList();
+      ArrayList<String> incArcs = transitions[i].getIncomingArcsList();
       for (int j=0; j<incArcs.size(); j++) {
         String ID = incArcs.get(i);
         String orgID = arcTable.get(ID).getOriginID();
