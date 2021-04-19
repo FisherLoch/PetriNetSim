@@ -1399,11 +1399,112 @@ public class PetriNetSimulator {
     // add each new model to arraylist of models, if true not already set in hash table that is passed down
 
     // allow user to set depth?
+
+
+
+
+
+
+    // get enabled transitions
+
+    // for each one
+      // fire
+      // getStringFromModel, check if exists in hashTable
+        // if exists, ignore
+        // if not, add true entry to hashTable address
+
+
+      // getReachabilityGraph for new model
+        // once depth reached or no enabled transitions
+        // return
+      // unfire the same transition
+      
+
+
+
+
+
+
+
+
+
   }
 
 
-  public static int[] getEnabledTransitionIndexes() {
+  public static int[] getEnabledTransitionIndexes(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable) {
 
+    ArrayList<Integer> enabledIndexes = new ArrayList<Integer>();
+
+
+    for (int i=0; i<transitions.length; i++) {
+      boolean enabled = true;
+      ArrayList<String> incArcs = transitions[i].getIncomingArrayList();
+      for (int j=0; j<incArcs.size(); j++) {
+        String ID = incArcs.get(i);
+        String orgID = arcTable.get(ID).getOriginID();
+        if (placeTable.get(orgID).getTokens() < arcTable.get(ID).getWeight()) {
+          enabled = false;
+          break; // if at least one place is not enabling the transition then stop the for loop to save time 
+        }
+      }
+
+      if (enabled) {
+        enabledIndexes.add(i);
+      }
+    }
+
+    int[] transIndexes = new int[enabledIndexes.size()];
+
+    for (int i=0; i<enabledIndexes.size(); i++) {
+      transIndexes[i] = enabledIndexes.get(i);
+    }
+
+    return transIndexes;
+  }
+  
+  // a lot faster version of the general fireTransition function
+  public static void fireTransitionArr(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, int transIndex) {
+
+    ArrayList<String> incArcs = transitions[transIndex].getIncomingArcsList();
+    ArrayList<String> outArcs = transitions[transIndex].getOutgoingArcsList();
+
+    for (int i=0; i<incArcs.size(); i++) {
+      // contains the string of the ID of the arc
+      String ID = incArcs.get(i);
+      String orgID = arcTable.get(ID).getOriginID();
+      // remove tokens from place with ID in ID
+      placeTable.get(orgID).addTokens(-arcTable.get(ID).getWeight());
+    }
+
+
+    for (int i=0; i<outArcs.size(); i++) {
+      String ID = outArcs.get(i);
+      String endID = arcTable.get(ID).getEndpointID();
+      placeTable.get(endID).addTokens(arcTable.get(ID).getWeight());
+    }
+
+  }
+
+  public static void unfireTransitionArr(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, int transIndex) {
+
+    ArrayList<String> incArcs = transitions[transIndex].getIncomingArcsList();
+    ArrayList<String> outArcs = transitions[transIndex].getOutgoingArcsList();
+
+    for (int i=0; i<incArcs.size(); i++) {
+      // contains the string of the ID of the arc
+      String ID = incArcs.get(i);
+      String orgID = arcTable.get(ID).getOriginID();
+      // add tokens from place with ID in ID
+      placeTable.get(orgID).addTokens(arcTable.get(ID).getWeight());
+    }
+
+
+    for (int i=0; i<outArcs.size(); i++) {
+      String ID = outArcs.get(i);
+      String endID = arcTable.get(ID).getEndpointID();
+      // removing tokens from the outgoing places from the transition
+      placeTable.get(endID).addTokens(-arcTable.get(ID).getWeight());
+    }
   }
 
 
