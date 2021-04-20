@@ -34,6 +34,8 @@ public class Arc {
   public Arc(Arc a) {
     this.ID = a.getID();
     this.label = a.getLabel();
+    this.origin = a.getOrigin();
+    this.endpoint = a.getEndpoint();
     this.originID = a.getOrigin();
     this.endpointID = a.getEndpoint();
     this.weight = a.getWeight();

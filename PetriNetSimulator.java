@@ -145,7 +145,7 @@ public class PetriNetSimulator {
     JMenu mbCompute = new JMenu("COMPUTE");
     JMenuItem reachGraph = new JMenuItem("Reachability graph");
 
-    reachGraph.addActionListener(e -> reachabilityGraph(places, transitions, arcs));
+    reachGraph.addActionListener(e -> reachabilityGraph(places, transitions, arcs, 5));
 
     mbCompute.add(reachGraph);
 
@@ -1372,7 +1372,7 @@ public class PetriNetSimulator {
   }
 
 
-  public static void reachabilityGraph(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs) {
+  public static void reachabilityGraph(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, int depthToReach) {
     // change arraylists into arrays, pass into getStringFromModel
     // create new arrayList with String for modelDatas, pass into getReachabilityGraph functiono
 
@@ -1414,31 +1414,25 @@ public class PetriNetSimulator {
       arcTable.put(arcArr[i].getID(), arcArr[i]);
     }
     
-    getStringFromModel(placeArr, transArr, arcArr, placeTable, transTable, arcTable);
+     //getStringFromModel(placeArr, transArr, arcArr, placeTable, transTable, arcTable);
 
 
     // arrayList when function is done should contain all models up to x depth
 
     ArrayList<String> reachableModels = new ArrayList<String>();
+    Hashtable<String, String> foundModels = new Hashtable<String, String>(depthToReach * places.size() * transitions.size()); // arbitrary size for hash table, ideally slightly larger than the number of reachable models that will be found 
 
+    getReachabilityGraph(placeArr, transArr, arcArr, placeTable, transTable, arcTable, reachableModels, foundModels, depthToReach, 0);
+  
+    System.out.println("Reachable models:");
+    for (int i=0; i<reachableModels.size(); i++) {
+      System.out.println("Model " + i + ": " + reachableModels.get(i));
+    }
 
   }
 
-  public static void getReachabilityGraph(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, ArrayList<String> reachableModels) {
-    // get enabled transitions
-    // for each, do the transition and pass back into get reachability graph
-    
-    // need a decent way of storing the data before firing the transition as the objects will get changed as they get passed down
-    // could possibly change back to arraylists and use the unfire transition function??
-
-    // add each new model to arraylist of models, if true not already set in hash table that is passed down
-
-    // allow user to set depth?
-
-
-
-
-
+  public static void getReachabilityGraph(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, ArrayList<String> reachableModels, Hashtable<String, String> foundModels, int depthToReach, int depth) {
+  
 
     // get enabled transitions
 
@@ -1453,15 +1447,38 @@ public class PetriNetSimulator {
         // once depth reached or no enabled transitions
         // return
       // unfire the same transition
-      
+    
+    if (depth >= depthToReach) { // base case (net could potentially go infinitely so have a depth value set to limit it)
+      return;
+    } else {
+      int[] enabledIndexes = getEnabledTransitionIndexes(places, transitions, arcs, placeTable, transTable, arcTable);
+        System.out.println();
+      for (int i=0; i<enabledIndexes.length; i++) {
+        System.out.println("Transition " + (enabledIndexes[i] + 1) + " is enabled");
 
+      }
+        System.out.println();
+      if (enabledIndexes.length == 0) {
+        return;
+      } else {
+        for (int i=0; i<enabledIndexes.length; i++) {
+          fireTransitionArr(places, transitions, arcs, placeTable, transTable, arcTable, enabledIndexes[i]);
+          String model = getStringFromModel(places, transitions, arcs, placeTable, transTable, arcTable);
+          //System.out.println("Model: " + model);
 
-
-
-
-
-
-
+          if (foundModels.get(model) != null) {
+            // model already found so do nothing
+            //System.out.println("Model already found");
+          } else {
+            //System.out.println("Model not found");
+            foundModels.put(model, "Found");
+            reachableModels.add(model);
+          }
+          getReachabilityGraph(places, transitions, arcs, placeTable, transTable, arcTable, reachableModels, foundModels, depthToReach, depth + 1);
+          unfireTransitionArr(places, transitions, arcs, placeTable, transTable, arcTable, enabledIndexes[i]);
+        }
+      }
+    }
 
   }
 
@@ -1475,7 +1492,7 @@ public class PetriNetSimulator {
       boolean enabled = true;
       ArrayList<String> incArcs = transitions[i].getIncomingArcsList();
       for (int j=0; j<incArcs.size(); j++) {
-        String ID = incArcs.get(i);
+        String ID = incArcs.get(j);
         String orgID = arcTable.get(ID).getOriginID();
         if (placeTable.get(orgID).getTokens() < arcTable.get(ID).getWeight()) {
           enabled = false;
