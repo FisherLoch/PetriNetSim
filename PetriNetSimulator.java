@@ -145,7 +145,7 @@ public class PetriNetSimulator {
     JMenu mbCompute = new JMenu("COMPUTE");
     JMenuItem reachGraph = new JMenuItem("Reachability graph");
 
-    reachGraph.addActionListener(e -> reachabilityGraph(places, transitions, arcs, 5));
+    reachGraph.addActionListener(e -> callPopupMenuSingleBox("Reachability graph", simulator, places, transitions, arcs, canvas, "Depth:", transitionsFired));
 
     mbCompute.add(reachGraph);
 
@@ -622,7 +622,10 @@ public class PetriNetSimulator {
         
         for (int i=0; i<ticks; i++) { 
           System.out.println("Next tick");
-          nextTick(places, transitions, arcs, canvas, sim, transFired);
+          if (!nextTick(places, transitions, arcs, canvas, sim, transFired)) {
+            System.out.println("No more enabled transitions");
+            return;
+          }
           try {
             Thread.sleep(sleepTime);
           } catch (InterruptedException e) {
@@ -750,6 +753,17 @@ public class PetriNetSimulator {
             nextXTicks(places, transitions, arcs, canvas, sim, ticks, transFired);
           }
           
+        } else if (title.equals("Reachability graph")) {
+          if (!isNumeric(box1Text)) {
+            callErrorBox("         Not a number");
+          } else if (Integer.parseInt(box1Text) < 0) {
+            callErrorBox("Number cannot be less than 0");
+          } else if (Integer.parseInt(box1Text) > 30) {
+            callErrorBox("Number cannot be more than 30");
+          } else { 
+            int depth = Integer.parseInt(box1Text);
+            reachabilityGraph(places, transitions, arcs, depth);
+          }
         }
 
         popupMenu.dispose();
@@ -1141,7 +1155,7 @@ public class PetriNetSimulator {
   }
 
 
-  public static void nextTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, ArrayList<String> transFired) {
+  public static boolean nextTick(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, ArrayList<String> transFired) {
     // get ids of enabled transitions
     ArrayList<String> enabledTrans = new ArrayList<String>();
 
@@ -1158,7 +1172,7 @@ public class PetriNetSimulator {
 
     if (enabledTrans.size() == 0) {
       System.out.println("No transitions enabled");
-      return;
+      return false;
     }
 
     // pick a random id from these
@@ -1169,6 +1183,7 @@ public class PetriNetSimulator {
     fireTransition(places, transitions, arcs, enabledTrans.get(randIndex), canvas, transFired);
 
     sim.repaint();
+    return true;
 
   }
 
@@ -1414,21 +1429,38 @@ public class PetriNetSimulator {
       arcTable.put(arcArr[i].getID(), arcArr[i]);
     }
     
-     //getStringFromModel(placeArr, transArr, arcArr, placeTable, transTable, arcTable);
+    String initModel = getStringFromModel(placeArr, transArr, arcArr, placeTable, transTable, arcTable);
 
 
     // arrayList when function is done should contain all models up to x depth
 
     ArrayList<String> reachableModels = new ArrayList<String>();
     Hashtable<String, String> foundModels = new Hashtable<String, String>(depthToReach * places.size() * transitions.size()); // arbitrary size for hash table, ideally slightly larger than the number of reachable models that will be found 
+    reachableModels.add(initModel);
+    foundModels.put(initModel, "Found");
 
-    getReachabilityGraph(placeArr, transArr, arcArr, placeTable, transTable, arcTable, reachableModels, foundModels, depthToReach, 0);
+
+    getReachabilityGraph(placeArr, transArr, arcArr, placeTable, transTable, arcTable, reachableModels, foundModels, depthToReach, 1);
   
     System.out.println("Reachable models:");
     for (int i=0; i<reachableModels.size(); i++) {
-      System.out.println("Model " + i + ": " + reachableModels.get(i));
+      String tuple = convertModelToTuple(reachableModels.get(i));
+      System.out.println("Model " + (i+1) + ": " + reachableModels.get(i) + " -> " + tuple);
     }
 
+  }
+
+  public static String convertModelToTuple(String model) {
+    String tuple = "";
+    String[] initSplit = model.split("/");
+    if (initSplit.length > 1) {
+      String[] places = initSplit[0].split(":");
+      for (int i=0; i<places.length; i++) {
+        String[] place = places[i].split("-");
+        tuple = tuple + place[0] + "(" + place[1] + "), ";
+      }
+    }
+    return tuple;
   }
 
   public static void getReachabilityGraph(Place[] places, Transition[] transitions, Arc[] arcs, Hashtable<String, Place> placeTable, Hashtable<String, Transition> transTable, Hashtable<String, Arc> arcTable, ArrayList<String> reachableModels, Hashtable<String, String> foundModels, int depthToReach, int depth) {
@@ -1447,6 +1479,7 @@ public class PetriNetSimulator {
         // once depth reached or no enabled transitions
         // return
       // unfire the same transition
+
     
     if (depth >= depthToReach) { // base case (net could potentially go infinitely so have a depth value set to limit it)
       return;
