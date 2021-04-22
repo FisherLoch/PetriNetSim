@@ -210,7 +210,6 @@ public class Arc {
 
   }
 
-
 /*
   public void renderTransition(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
     g.setColor(Color.BLACK);
@@ -218,39 +217,58 @@ public class Arc {
     g2.setStroke(new BasicStroke(3));
 
 
-
+    double cpDist = Math.sqrt(Math.pow(originX - endpointX, 2) + Math.pow(originY - endpointY, 2));
+    double angle;
     if (originX < endpointX) {
       if (originY < endpointY) { // down left
+        angle = Math.asin((originX - endpointX)/cpDist);
+        angle = 2*Math.PI - angle;
+        // angle for anticlock rotation
         
       } else if (originY > endpointY) { // up left
+        angle = Math.asin((originX - endpointX)/cpDist);
+        angle = Math.PI + angle;
         
-      } else { // same horz line
-      
+      } else { // same horz line, left
+        // endpoint changed to endpointX + radius
+        // maybe draw line here and return?
+        angle = 3/2 * Math.PI;
       }
     } else if (originX > endpointX) {
       if (originY < endpointY) { // down right
         
+        angle = Math.asin((endpointX - originX)/cpDist);
+        // already the right angle
+        
       } else if (originY > endpointY) { // up right
+        angle = Math.asin((endpointX - originX)/cpDist);
+        angle = Math.PI - angle;
 
-      } else { // same horz line
-      
+      } else { // same horz line, right
+        angle = 1/2 * Math.PI;
       }
     } else { // same vertical line
       if (originY < endpointY) { // below
-
+        angle = 0;
       } else if (originY > endpointY) { // above
-
+        angle = Math.PI;
       } else { // same place
-         
+        // dont draw line
+        return;
       }
     }
 
 
 
     // initial line for arc actually starts facing downwards, so down left is 0-90, up right is 90-180, up left is 180-270 and down leftis 270-360
-
-
-
+    
+    double newDist = cpDist - radius;
+    // rotate this point about origin with angle
+    int endXOffset = (int) Math.round(-newDist * Math.sin(angle));
+    int endYOffset = (int) Math.round(newDist * Math.cos(angle));
+    int endX = originX + endXOffset;
+    int endY = originY + endYOffset;
+    g2.drawLine(originX, originY, endX, endY);
 
 
 
