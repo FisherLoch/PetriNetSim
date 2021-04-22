@@ -739,7 +739,7 @@ public class PetriNetSimulator {
             callErrorBox("Label does not match any transition");
           } else {
             String IDToPass = getTransIDFromLabel(box1Text, transitions);
-            removePlace(IDToPass, places, transitions, arcs, canvas);
+            removeTransition(IDToPass, places, transitions, arcs, canvas);
           }
         } else if (title.equals("Next X ticks")) {
           if (!isNumeric(box1Text)) {
@@ -1060,12 +1060,9 @@ public class PetriNetSimulator {
   public static void fireTransition(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, String transitionID, DiagramCanvas canvas, ArrayList<String> transFired) {
     transFired.add(transitionID);
 
-
-    //System.out.println("In fire transition");
     Transition t = new Transition();
     for (int i=0; i<transitions.size(); i++) {
       if (transitions.get(i).getID().equals(transitionID)) {
-        //System.out.println("Found transition");
         t = transitions.get(i);
         break;
       }
@@ -1076,14 +1073,6 @@ public class PetriNetSimulator {
     ArrayList<String> incArcs = t.getIncomingArcsList();
     ArrayList<String> outArcs = t.getOutgoingArcsList();
 
-/*
-    for (int i=0; i<incArcs.size(); i++) {
-      System.out.println("Inc arc: " + incArcs.get(i));
-    }
-    for (int i=0; i<outArcs.size(); i++) {
-      System.out.println("Out arc: " + outArcs.get(i));
-    }
-*/
     for (int i=0; i<incArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
         if (arcs.get(j).getID().equals(incArcs.get(i))) {
@@ -1094,7 +1083,6 @@ public class PetriNetSimulator {
       }
     }
 
-
     for (int i=0; i<outArcs.size(); i++) {
       for (int j=0; j<arcs.size(); j++) {
         if (arcs.get(j).getID().equals(outArcs.get(i))) {
@@ -1104,11 +1092,7 @@ public class PetriNetSimulator {
       }
     }
 
-
     canvas.setPlaces(places);
-
-
-
   }
 
   public static void setFiredColours(ArrayList<Transition> transitions, ArrayList<String> transFired, Transition t) {
@@ -1485,12 +1469,15 @@ public class PetriNetSimulator {
       return;
     } else {
       int[] enabledIndexes = getEnabledTransitionIndexes(places, transitions, arcs, placeTable, transTable, arcTable);
+      /*
         System.out.println();
+
       for (int i=0; i<enabledIndexes.length; i++) {
         System.out.println("Transition " + (enabledIndexes[i] + 1) + " is enabled");
 
       }
         System.out.println();
+        */
       if (enabledIndexes.length == 0) {
         return;
       } else {
