@@ -103,6 +103,122 @@ public class Arc {
     g.setColor(Color.BLACK);
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(3));
+    
+    double sideX = originY;
+    double sideY = Math.sqrt(Math.pow(originX - endpointX, 2) + Math.pow(originY - endpointY, 2));
+    double sideZ = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY, 2));
+
+
+    //System.out.println("sides: x: " + sideX + " y: " + sideY + " z: " + sideZ);
+
+    //System.out.println("-cosing: " + (  (Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)) / (2 * sideX * sideY)   ));
+//    double angle = Math.acos((Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)/(2 * sideX * sideY)));
+    double angle = Math.acos( (Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)) / (2 * sideX * sideY)      );
+
+    //System.out.println("Angle: " + (angle * 180/Math.PI));
+
+    double rotAngle = Math.PI;
+    if (originX <= endpointX) { // triangle faces right
+      rotAngle = -angle;
+
+    } else { // triangle faces left
+      rotAngle =  angle;
+    }
+
+    //System.out.println("RotAngle = " + (rotAngle * 180/Math.PI));
+    //System.out.println("Radius: " + radius);
+    
+    // (0, radius) rotation
+
+    int originOffsetX = (int) Math.round(-radius * Math.sin(rotAngle));
+    int originOffsetY = (int) Math.round(radius * Math.cos(rotAngle));
+
+    //System.out.println("Offsets - X: " + originOffsetX + " Y: " + originOffsetY);
+
+    g2.drawLine(originX + originOffsetX, originY + originOffsetY, endpointX, endpointY);
+
+
+    
+    int midX = Math.round((originX + originOffsetX + endpointX)/2);
+    int midY = Math.round((originY + originOffsetY + endpointY)/2);
+
+    g2.drawString(label, midX, midY - 20);
+    g2.drawString(Integer.toString(weight), midX, midY + 20);
+
+
+/*
+    double arrowAngleLeft = angle - Math.PI/6;
+    double arrowAngleRight = angle + Math.PI/6;
+
+    int leftHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleLeft));
+    int leftHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleLeft));
+
+    int rightHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleRight));
+    int rightHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleRight));
+
+    g2.drawLine(endpointX, endpointY, endpointX + rightHeadEndpointX, endpointY + rightHeadEndpointY);
+    g2.drawLine(endpointX, endpointY, endpointX + leftHeadEndpointX, endpointY + leftHeadEndpointY);
+
+*/
+
+
+      
+  }
+
+  public void renderTransition(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
+    g.setColor(Color.BLACK);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
+    
+    double sideX = originY;
+    double sideY = Math.sqrt(Math.pow(originX - endpointX, 2) + Math.pow(originY - endpointY, 2));
+    double sideZ = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY, 2));
+
+
+    //System.out.println("sides: x: " + sideX + " y: " + sideY + " z: " + sideZ);
+
+    //System.out.println("-cosing: " + (  (Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)) / (2 * sideX * sideY)   ));
+//    double angle = Math.acos((Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)/(2 * sideX * sideY)));
+    double angle = Math.acos( (Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)) / (2 * sideX * sideY)      );
+
+    //System.out.println("Angle: " + (angle * 180/Math.PI));
+
+    double rotAngle = Math.PI;
+    if (originX <= endpointX) { // triangle faces right
+      rotAngle = rotAngle - angle;
+
+    } else { // triangle faces left
+      rotAngle = rotAngle + angle;
+    }
+
+    //System.out.println("RotAngle = " + (rotAngle * 180/Math.PI));
+    //System.out.println("Radius: " + radius);
+    
+    // (0, radius) rotation
+
+    int originOffsetX = (int) Math.round(-radius * Math.sin(rotAngle));
+    int originOffsetY = (int) Math.round(radius * Math.cos(rotAngle));
+
+    //System.out.println("Offsets - X: " + originOffsetX + " Y: " + originOffsetY);
+
+    g2.drawLine(endpointX + originOffsetX, endpointY + originOffsetY, originX, originY);
+
+
+  }
+
+
+
+
+
+
+
+
+
+/*
+  public void renderPlace(Graphics g, int originX, int originY, int radius, int endpointX, int endpointY) {
+    g.setColor(Color.BLACK);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
 
    
     double sideX = originY;
