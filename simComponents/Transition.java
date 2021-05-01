@@ -18,8 +18,6 @@ public class Transition {
   
   int width = 20;
   int height = 80;
-  volatile int mouseX = 0;
-  volatile int mouseY = 0;
   
   boolean fired = false;
 
