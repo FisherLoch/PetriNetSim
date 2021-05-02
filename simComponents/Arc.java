@@ -109,6 +109,11 @@ public class Arc {
     double sideZ = Math.sqrt(Math.pow(endpointX - originX, 2) + Math.pow(endpointY, 2));
 
 
+    if (originX > endpointX) {
+      endpointX = endpointX + 20;
+    }
+
+
     //System.out.println("sides: x: " + sideX + " y: " + sideY + " z: " + sideZ);
 
     //System.out.println("-cosing: " + (  (Math.pow(sideZ, 2) - Math.pow(sideX, 2) - Math.pow(sideY, 2)) / (2 * sideX * sideY)   ));
@@ -146,9 +151,9 @@ public class Arc {
     g2.drawString(Integer.toString(weight), midX, midY + 20);
 
 
-/*
-    double arrowAngleLeft = angle - Math.PI/6;
-    double arrowAngleRight = angle + Math.PI/6;
+
+    double arrowAngleLeft = rotAngle + Math.PI - Math.PI/6;
+    double arrowAngleRight = rotAngle + Math.PI + Math.PI/6;
 
     int leftHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleLeft));
     int leftHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleLeft));
@@ -159,7 +164,7 @@ public class Arc {
     g2.drawLine(endpointX, endpointY, endpointX + rightHeadEndpointX, endpointY + rightHeadEndpointY);
     g2.drawLine(endpointX, endpointY, endpointX + leftHeadEndpointX, endpointY + leftHeadEndpointY);
 
-*/
+
 
 
       
@@ -202,6 +207,27 @@ public class Arc {
     //System.out.println("Offsets - X: " + originOffsetX + " Y: " + originOffsetY);
 
     g2.drawLine(endpointX + originOffsetX, endpointY + originOffsetY, originX, originY);
+
+    int midX = Math.round((originX + originOffsetX + endpointX)/2);
+    int midY = Math.round((originY + originOffsetY + endpointY)/2);
+
+    g2.drawString(label, midX, midY - 20);
+    g2.drawString(Integer.toString(weight), midX, midY + 20);
+
+
+
+    double arrowAngleLeft = rotAngle - Math.PI/6;
+    double arrowAngleRight = rotAngle + Math.PI/6;
+
+    int leftHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleLeft));
+    int leftHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleLeft));
+
+    int rightHeadEndpointX = (int) Math.round(-10 * Math.sin(arrowAngleRight));
+    int rightHeadEndpointY = (int) Math.round(10 * Math.cos(arrowAngleRight));
+
+    g2.drawLine(endpointX + originOffsetX, endpointY + originOffsetY, endpointX + originOffsetX + rightHeadEndpointX, endpointY + originOffsetY + rightHeadEndpointY);
+    g2.drawLine(endpointX + originOffsetX, endpointY + originOffsetY, endpointX + originOffsetX + leftHeadEndpointX, endpointY + originOffsetY + leftHeadEndpointY);
+
 
 
   }
