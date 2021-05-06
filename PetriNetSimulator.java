@@ -43,6 +43,7 @@ public class PetriNetSimulator {
     simulator.setSize(2000, 1500);
     JMenuBar menuBar = new JMenuBar();
     // Debugging
+    /*
     JMenu mbDebug = new JMenu("DEBUG");
     JMenuItem dispPlaces = new JMenuItem("Display places");
     mbDebug.add(dispPlaces);
@@ -51,7 +52,7 @@ public class PetriNetSimulator {
     JMenuItem dispTransitions = new JMenuItem("Display transitions");
     mbDebug.add(dispTransitions);
     dispTransitions.addActionListener(e -> displayTransitionArray(transitions));
-
+*/
     simulator.add(canvas);  
     
 
@@ -554,6 +555,9 @@ public class PetriNetSimulator {
               callErrorBox("Number cannot be less than 0");
            } else {
               setTokensInPlace(Integer.parseInt(newText), places, origText);
+              for (int i=transFired.size()-1; i>=0; i--) {
+                transFired.remove(i);
+              }
            }
         } else if (title.equals("Add new arc")) {
           // check if orig label matches place
@@ -743,7 +747,7 @@ public class PetriNetSimulator {
           }
         } else if (title.equals("Next X ticks")) {
           if (!isNumeric(box1Text)) {
-            callErrorBox("         Not a number");
+            callErrorBox("         Not a valid number");
           } else if (Integer.parseInt(box1Text) < 0) {
             callErrorBox("Number cannot be less than 0");
           } else if (Integer.parseInt(box1Text) > 30) {
@@ -755,7 +759,7 @@ public class PetriNetSimulator {
           
         } else if (title.equals("Reachability graph")) {
           if (!isNumeric(box1Text)) {
-            callErrorBox("         Not a number");
+            callErrorBox("         Not a valid number");
           } else if (Integer.parseInt(box1Text) < 0) {
             callErrorBox("Number cannot be less than 0");
           } else if (Integer.parseInt(box1Text) > 30) {
