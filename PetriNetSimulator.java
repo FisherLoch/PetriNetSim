@@ -628,6 +628,7 @@ public class PetriNetSimulator {
           System.out.println("Next tick");
           if (!nextTick(places, transitions, arcs, canvas, sim, transFired)) {
             System.out.println("No more enabled transitions");
+            stopSim();
             return;
           }
           try {
@@ -1130,8 +1131,13 @@ public class PetriNetSimulator {
   }
 
   public static void nextXTicks(ArrayList<Place> places, ArrayList<Transition> transitions, ArrayList<Arc> arcs, DiagramCanvas canvas, JFrame sim, int ticksToPass, ArrayList<String> transFired) {
+    boolean enabled = true;
     for (int i=0; i<ticksToPass; i++) {
-      nextTick(places, transitions, arcs, canvas, sim, transFired);
+      enabled = nextTick(places, transitions, arcs, canvas, sim, transFired);
+      if (enabled == false) {
+        System.out.println("No more transitions enabled after " + i + " ticks");
+        return;
+      }
       /*
       try {
         Thread.sleep(1000);
@@ -1370,7 +1376,7 @@ public class PetriNetSimulator {
 
 
 
-    System.out.println("modelData: " + modelData);
+    //System.out.println("modelData: " + modelData);
     return modelData;
   }
 
