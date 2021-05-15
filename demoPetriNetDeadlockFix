@@ -27,16 +27,16 @@ Arcbe25fd49-b776-4bf0-bde1-0ba40fd80b53
 Arcf51a6f7b-afae-44b3-a870-61cef65a047e
 outArcs
 Arcc7ed10b1-c0e4-4ffc-aaa8-6950ef3af7fc
-Arce0dd02da-dfd2-41d3-b118-ddae18da192c
+Arc11555cfc-99d3-4ca9-8a56-2c9495a93920
 New place
 Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
-Place 5-1-923-247
+Place 5-1-906-280
 incArcs
 Arc6f7f4f6c-3146-4343-9cdf-f01c3977c47a
 Arccf1f8d19-5dff-4fae-92ad-dd4568a32cf0
 outArcs
 Arc37840981-6023-42dd-b940-e5b596d9a001
-Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
+Arc14958574-5596-4b81-8088-1c00d91b15e3
 New place
 Place15fce1db-9601-42f3-9c56-e23d8e267121
 Place 6-1-1518-521
@@ -89,6 +89,7 @@ Transition 4-1268-123
 incArcs
 Arcacbc6f89-9b40-4e8e-b89c-8d4ab94542c8
 Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
+Arc11555cfc-99d3-4ca9-8a56-2c9495a93920
 outArcs
 Arc761f7139-1651-4eef-a50e-821cacca3226
 New transition
@@ -106,6 +107,7 @@ Transition 6-1237-417
 incArcs
 Arc667b5255-c040-430a-a83e-28750de51429
 Arce0dd02da-dfd2-41d3-b118-ddae18da192c
+Arc14958574-5596-4b81-8088-1c00d91b15e3
 outArcs
 Arc4c25c535-dd07-4cdd-a66d-6e6b0cf82017
 New arc
@@ -189,22 +191,22 @@ Arc 16-1
 Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
 Place15fce1db-9601-42f3-9c56-e23d8e267121
 New arc
-Arc8637e75b-def9-47d2-bd6f-8da234d73f6e
-Arc 17-1
-Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
-Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47
-New arc
-Arce0dd02da-dfd2-41d3-b118-ddae18da192c
-Arc 18-1
-Place184685d7-bfcb-4e41-b3e9-268919555aec
-Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
-New arc
 Arccf1f8d19-5dff-4fae-92ad-dd4568a32cf0
-Arc 19-1
+Arc 17-1
 Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
 Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
 New arc
 Arcf51a6f7b-afae-44b3-a870-61cef65a047e
-Arc 20-1
+Arc 18-1
 Trans7591a163-b26c-4cfb-bd00-8ff2c4994c96
 Place184685d7-bfcb-4e41-b3e9-268919555aec
+New arc
+Arc14958574-5596-4b81-8088-1c00d91b15e3
+Arc 19-1
+Place79dee42c-f503-4c70-b2db-cfe5e92d2f13
+Trans0ad7dc44-00ef-4fd0-9985-02b46763ecfa
+New arc
+Arc11555cfc-99d3-4ca9-8a56-2c9495a93920
+Arc 20-1
+Place184685d7-bfcb-4e41-b3e9-268919555aec
+Trans2afff3a2-c4a2-44e2-8e0e-21a8d6de0e47

@@ -540,7 +540,7 @@ public class PetriNetSimulator {
           if (!doesArcExist(arcs, origText)) {
             callErrorBox("Label does not match any arc");
           } else if (!isNumeric(newText)) {
-            callErrorBox("           Not a number");
+            callErrorBox("      Not a valid number");
           } else if (Integer.parseInt(newText) < 1) {
             callErrorBox("Number cannot be less than 1");
           } else {
@@ -550,7 +550,7 @@ public class PetriNetSimulator {
            if (!doesPlaceExist(places, origText)) {
               callErrorBox("Label does not match any place");
            } else if (!isNumeric(newText)) {
-              callErrorBox("         Not a number");
+              callErrorBox("     Not a valid number");
            } else if (Integer.parseInt(newText) < 0) {
               callErrorBox("Number cannot be less than 0");
            } else {

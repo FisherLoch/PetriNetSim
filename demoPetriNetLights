@@ -1,41 +1,41 @@
 New place
 Place81aa70d1-a535-40fa-adc9-cf6d75c959f0
-red1-1-275-96
+red1-1-227-94
 incArcs
 Arc6275e7a8-6306-47c0-ac03-21d722d3fa69
 outArcs
 Arc26f34795-eb6f-4849-a79c-dbfc78912ca6
 New place
 Place78e653cd-8743-4924-8263-61f60a90aea6
-yellow1-0-276-370
+yellow1-0-251-307
 incArcs
 Arc842ef92d-cb93-4341-8ecd-0991f4c6c8ab
 outArcs
 Arc3ec2f1d8-5e2e-41ee-9fec-e177911c9da9
 New place
 Place07dbd2cc-8312-4025-abf3-635e2a16a2da
-green1-0-254-735
+green1-0-255-747
 incArcs
 Arce5abd0de-ee25-4263-9c28-71d44f3b3efc
 outArcs
 Arc002ea2c9-5834-4a78-aa11-5a85ff7003da
 New place
 Placed3e83493-9f42-446e-b8e0-55daa5a894ce
-red2-1-808-94
+red2-1-892-105
 incArcs
 Arc4eb6c790-927b-4b65-9391-1af808cad31f
 outArcs
 Arc70765e15-08eb-4903-9292-0cea056bc67d
 New place
 Placecacb3bf8-0d2e-4810-8dc2-3b7e5c863086
-yellow2-0-827-398
+yellow2-0-866-461
 incArcs
 Arc4225a43e-b751-47f6-88c9-35dbb6af5014
 outArcs
 Arc7c79133b-4adb-4f4b-a413-8d5e415ab98e
 New place
 Place2a4ca679-9592-4361-9d08-943fa56e0b1e
-green2-0-829-671
+green2-0-922-687
 incArcs
 Arc4c72efe8-c09c-4fb5-a1bb-7684f43a6f4b
 outArcs
@@ -49,14 +49,14 @@ outArcs
 Arc1da8120d-ff54-4576-b3dc-ec55c9f83257
 New place
 Place02ae1efa-071c-4a54-8a66-65257b682074
-safe2-0-499-206
+safe2-0-545-194
 incArcs
 Arc6a2484ad-52de-4ce1-8a9e-563e2543f025
 outArcs
 Arcd80b5d85-d1d1-48cc-89de-4d82ce96abab
 New transition
 Trans8a6d455c-97e4-4bb2-8a8a-9fc98a7e8f21
-rg1-63-326
+rg1-51-320
 incArcs
 Arc26f34795-eb6f-4849-a79c-dbfc78912ca6
 Arc1da8120d-ff54-4576-b3dc-ec55c9f83257
@@ -71,7 +71,7 @@ outArcs
 Arc842ef92d-cb93-4341-8ecd-0991f4c6c8ab
 New transition
 Transd390a926-de35-438e-a894-9b6855dd6ac1
-yr1-333-194
+yr1-366-194
 incArcs
 Arc3ec2f1d8-5e2e-41ee-9fec-e177911c9da9
 outArcs
@@ -79,7 +79,7 @@ Arc6275e7a8-6306-47c0-ac03-21d722d3fa69
 Arc6a2484ad-52de-4ce1-8a9e-563e2543f025
 New transition
 Transa850c22d-1c7c-4ff5-b827-ba19db3c7db5
-gy2-695-515
+gy2-654-550
 incArcs
 Arce0611a93-c2ca-4279-a170-1ff531ab7a6f
 outArcs
@@ -94,7 +94,7 @@ outArcs
 Arc4c72efe8-c09c-4fb5-a1bb-7684f43a6f4b
 New transition
 Transcb147908-1608-4725-a441-af9c339c35ff
-yr2-704-165
+yr2-695-152
 incArcs
 Arc7c79133b-4adb-4f4b-a413-8d5e415ab98e
 outArcs
